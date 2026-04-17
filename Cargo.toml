@@ -1,0 +1,21 @@
+[package]
+name = "TwoClear"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gpui          = { git = "https://github.com/zed-industries/zed" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", features = ["font-kit", "runtime_shaders"] }
+gpui-component        = { git = "https://github.com/longbridge/gpui-component", package = "gpui-component" }
+gpui-component-assets = { git = "https://github.com/longbridge/gpui-component", package = "gpui-component-assets" }
+anyhow  = "1"
+smol    = "2"
+winreg  = "0.10"
+walkdir = "2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.58", features = [
+    "Win32_Graphics_Direct3D",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Dxgi",
+] }
