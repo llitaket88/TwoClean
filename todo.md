@@ -3,22 +3,22 @@
 ## Фаза 1: Основа проекта
 
 ### 1.1 Cargo.toml и структура
-- [ ] Обновить `Cargo.toml` с зависимостями: gpui, gpui_platform, gpui-component, gpui-component-assets, anyhow, smol, winreg, walkdir, windows
-- [ ] Создать `src/app.rs` (заглушка)
-- [ ] Создать `src/models.rs` (заглушка)
-- [ ] Создать `src/platform/mod.rs`
-- [ ] Создать `src/platform/utils.rs` (заглушка)
-- [ ] Создать `src/platform/versions.rs` (заглушка)
-- [ ] Создать `src/platform/cache.rs` (заглушка)
-- [ ] Создать `src/platform/infobases.rs` (заглушка)
-- [ ] `cargo build` проходит без ошибок
+- [x] Обновить `Cargo.toml` с зависимостями: gpui, gpui_platform, gpui-component, gpui-component-assets, anyhow, smol, winreg, walkdir, windows
+- [x] Создать `src/app.rs` (заглушка)
+- [x] Создать `src/models.rs` (заглушка)
+- [x] Создать `src/platform/mod.rs`
+- [x] Создать `src/platform/utils.rs` (заглушка)
+- [x] Создать `src/platform/versions.rs` (заглушка)
+- [x] Создать `src/platform/cache.rs` (заглушка)
+- [x] Создать `src/platform/infobases.rs` (заглушка)
+- [x] `cargo build` проходит без ошибок
 
 ### 1.2 Модели данных
-- [ ] `InstalledVersion` — name, version, version_int, uuid, location, install_date, size, selected
-- [ ] `CacheEntry` — path, uuid, display_name, size, selected
-- [ ] `InfoBase` — name, uuid, version, connection, is_file_base, size, selected
-- [ ] Все структуры: `#[derive(Debug, Clone)]`
-- [ ] `cargo build` проходит без ошибок
+- [x] `InstalledVersion` — name, version, version_int, uuid, location, install_date, size, selected
+- [x] `CacheEntry` — path, uuid, display_name, size, selected
+- [x] `InfoBase` — name, uuid, version, connection, is_file_base, size, selected
+- [x] Все структуры: `#[derive(Debug, Clone)]`
+- [x] `cargo build` проходит без ошибок
 
 ---
 
