@@ -748,7 +748,7 @@ impl TwoClearApp {
                                     )
                                     .child(
                                         div()
-                                            .w_48()
+                                            .w_56()
                                             .text_xs()
                                             .text_color(cx.theme().muted_foreground)
                                             .overflow_hidden()
