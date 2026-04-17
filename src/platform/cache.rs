@@ -24,8 +24,8 @@ fn is_uuid_dir(name: &str) -> bool {
 
 /// Возвращает список записей кэша метаданных 1C из %LOCALAPPDATA%\1C\1cv8*\{UUID}
 pub fn get_cache_entries() -> anyhow::Result<Vec<CacheEntry>> {
-    let local_app_data = std::env::var("LOCALAPPDATA")
-        .map_err(|_| anyhow::anyhow!("LOCALAPPDATA не определена"))?;
+    let local_app_data =
+        std::env::var("LOCALAPPDATA").map_err(|_| anyhow::anyhow!("LOCALAPPDATA не определена"))?;
 
     let base_dir = Path::new(&local_app_data).join("1C");
     if !base_dir.exists() {

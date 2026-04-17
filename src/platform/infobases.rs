@@ -1,14 +1,17 @@
 // src/platform/infobases.rs
 
-use std::path::PathBuf;
-use std::time::{SystemTime, UNIX_EPOCH};
 use crate::models::InfoBase;
 use crate::platform::utils::get_dir_size;
+use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn get_infobases_path() -> anyhow::Result<PathBuf> {
     let appdata = std::env::var("APPDATA")
         .map_err(|_| anyhow::anyhow!("Переменная окружения APPDATA не найдена"))?;
-    Ok(PathBuf::from(appdata).join("1C").join("1CEStart").join("ibases.v8i"))
+    Ok(PathBuf::from(appdata)
+        .join("1C")
+        .join("1CEStart")
+        .join("ibases.v8i"))
 }
 
 pub fn get_info_bases() -> anyhow::Result<Vec<InfoBase>> {
@@ -67,7 +70,13 @@ fn parse_ibases_v8i(content: &str) -> Vec<InfoBase> {
         let line = line.trim();
 
         if line.starts_with('[') && line.ends_with(']') {
-            flush(current_name.take(), &connect, &id, version.take(), &mut bases);
+            flush(
+                current_name.take(),
+                &connect,
+                &id,
+                version.take(),
+                &mut bases,
+            );
             current_name = Some(line[1..line.len() - 1].to_string());
             connect.clear();
             id.clear();
@@ -84,7 +93,13 @@ fn parse_ibases_v8i(content: &str) -> Vec<InfoBase> {
         }
     }
 
-    flush(current_name.take(), &connect, &id, version.take(), &mut bases);
+    flush(
+        current_name.take(),
+        &connect,
+        &id,
+        version.take(),
+        &mut bases,
+    );
 
     bases
 }
@@ -140,14 +155,15 @@ pub fn delete_info_bases(names: &[String]) -> anyhow::Result<()> {
     // Собираем информацию о базах для удаления файловых директорий
     let bases = parse_ibases_v8i(&content);
     for base in &bases {
-        if names.contains(&base.name) && base.is_file_base {
-            if let Some(file_path) = extract_file_path(&base.connection) {
-                // Не удаляем UNC-пути (\\server\share)
-                if !file_path.starts_with("\\\\") {
-                    let dir = std::path::Path::new(&file_path);
-                    if dir.exists() {
-                        let _ = std::fs::remove_dir_all(dir);
-                    }
+        if names.contains(&base.name)
+            && base.is_file_base
+            && let Some(file_path) = extract_file_path(&base.connection)
+        {
+            // Не удаляем UNC-пути (\\server\share)
+            if !file_path.starts_with("\\\\") {
+                let dir = std::path::Path::new(&file_path);
+                if dir.exists() {
+                    let _ = std::fs::remove_dir_all(dir);
                 }
             }
         }

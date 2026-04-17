@@ -6,6 +6,7 @@ pub struct InstalledVersion {
     pub version: String,
     pub version_int: u64,
     pub uuid: String,
+    #[allow(dead_code)]
     pub location: String,
     pub install_date: String,
     pub size: u64,

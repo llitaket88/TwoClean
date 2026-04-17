@@ -1,13 +1,13 @@
+use crate::platform::format_size;
+use crate::{models::*, platform};
+use gpui::prelude::FluentBuilder as _;
 use gpui::*;
-use gpui_component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
-use gpui_component::tab::{Tab, TabBar};
-use gpui_component::button::{Button, ButtonVariants};
 use gpui_component::Disableable;
+use gpui_component::button::{Button, ButtonVariants};
 use gpui_component::checkbox::Checkbox;
 use gpui_component::spinner::Spinner;
-use gpui::prelude::FluentBuilder as _;
-use crate::{models::*, platform};
-use crate::platform::format_size;
+use gpui_component::tab::{Tab, TabBar};
+use gpui_component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
 
 pub struct TwoClearApp {
     active_tab: usize,
@@ -262,20 +262,16 @@ impl TwoClearApp {
             .border_t_1()
             .border_color(cx.theme().border)
             .bg(cx.theme().tab_bar)
-            .child(
-                div()
-                    .flex_1()
-                    .text_sm()
-                    .map(|this| {
-                        if let Some(err) = &self.error_message {
-                            this.text_color(cx.theme().danger).child(err.clone())
-                        } else if let Some(msg) = &self.status_message {
-                            this.text_color(cx.theme().muted_foreground).child(msg.clone())
-                        } else {
-                            this
-                        }
-                    }),
-            )
+            .child(div().flex_1().text_sm().map(|this| {
+                if let Some(err) = &self.error_message {
+                    this.text_color(cx.theme().danger).child(err.clone())
+                } else if let Some(msg) = &self.status_message {
+                    this.text_color(cx.theme().muted_foreground)
+                        .child(msg.clone())
+                } else {
+                    this
+                }
+            }))
     }
 
     fn render_empty_state(message: impl Into<String>, cx: &Context<Self>) -> impl IntoElement {
@@ -465,7 +461,9 @@ impl TwoClearApp {
                             .small()
                             .ghost()
                             .on_click(cx.listener(|this, _, _, cx| {
-                                this.cache_entries.iter_mut().for_each(|e| e.selected = true);
+                                this.cache_entries
+                                    .iter_mut()
+                                    .for_each(|e| e.selected = true);
                                 cx.notify();
                             })),
                     )

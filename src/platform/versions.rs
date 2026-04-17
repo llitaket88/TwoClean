@@ -1,14 +1,19 @@
 // src/platform/versions.rs
+use crate::{
+    models::InstalledVersion,
+    platform::utils::{get_dir_size, parse_install_date},
+};
 use std::collections::HashSet;
 use winreg::{RegKey, enums::*};
-use crate::{models::InstalledVersion, platform::utils::{get_dir_size, parse_install_date}};
 
 const UNINSTALL_KEY: &str = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
 
 const VALID_PUBLISHERS: &[&str] = &["1С-Софт", "1C-Soft", "1C", "1С"];
 
 fn is_1c_publisher(publisher: &str) -> bool {
-    VALID_PUBLISHERS.iter().any(|&p| p.eq_ignore_ascii_case(publisher))
+    VALID_PUBLISHERS
+        .iter()
+        .any(|&p| p.eq_ignore_ascii_case(publisher))
 }
 
 fn version_to_int(version: &str) -> u64 {
@@ -21,13 +26,14 @@ fn version_to_int(version: &str) -> u64 {
         return 0;
     }
 
-    parts[0] * 10_000_000_000
-        + parts[1] * 100_000_000
-        + parts[2] * 100_000
-        + parts[3]
+    parts[0] * 10_000_000_000 + parts[1] * 100_000_000 + parts[2] * 100_000 + parts[3]
 }
 
-fn read_versions_from_key(key: &RegKey, seen: &mut HashSet<String>, result: &mut Vec<InstalledVersion>) {
+fn read_versions_from_key(
+    key: &RegKey,
+    seen: &mut HashSet<String>,
+    result: &mut Vec<InstalledVersion>,
+) {
     for subkey_name in key.enum_keys().filter_map(|k| k.ok()) {
         let subkey = match key.open_subkey(&subkey_name) {
             Ok(k) => k,
