@@ -65,65 +65,65 @@
 ## Фаза 3: UI
 
 ### 3.1 Точка входа (src/main.rs)
-- [ ] `gpui_platform::application().with_assets(Assets)`
-- [ ] `gpui_component::init(cx)` вызван первым
-- [ ] `WindowOptions` с `TitleBar::title_bar_options()` и размером 900×640
-- [ ] Заголовок окна "TwoClear — Очистка 1С"
-- [ ] Первая view обёрнута в `Root::new(view, window, cx)`
+- [x] `gpui_platform::application().with_assets(Assets)`
+- [x] `gpui_component::init(cx)` вызван первым
+- [x] `WindowOptions` с `TitleBar::title_bar_options()` и размером 900×640
+- [x] Заголовок окна "TwoClear — Очистка 1С"
+- [x] Первая view обёрнута в `Root::new(view, window, cx)`
 
 ### 3.2 Структура приложения (src/app.rs)
-- [ ] Struct `TwoClearApp` со всеми полями состояния
-- [ ] `new(window, cx)` — инициализация + `load_all_data`
-- [ ] `load_versions` — async через `background_executor`
-- [ ] `load_infobases_and_cache` — async, затем сопоставление UUID
-- [ ] Сопоставление: `display_name` и `selected` по UUID
-- [ ] `impl Render for TwoClearApp` — базовый скелет
+- [x] Struct `TwoClearApp` со всеми полями состояния
+- [x] `new(window, cx)` — инициализация + `load_all_data`
+- [x] `load_versions` — async через `background_executor`
+- [x] `load_infobases_and_cache` — async, затем сопоставление UUID
+- [x] Сопоставление: `display_name` и `selected` по UUID
+- [x] `impl Render for TwoClearApp` — базовый скелет
 
 ### 3.3 TitleBar и вкладки
-- [ ] `render_title_bar` — `TitleBar::new()` + `TabBar` с 3 вкладками
-- [ ] Переключение `active_tab` через `on_click`
-- [ ] `render_status_bar` — статус и ошибки внизу окна
+- [x] `render_title_bar` — `TitleBar::new()` + `TabBar` с 3 вкладками
+- [x] Переключение `active_tab` через `on_click`
+- [x] `render_status_bar` — статус и ошибки внизу окна
 
 ### 3.4 Вкладка «Версии платформы»
-- [ ] `render_versions_tab` — spinner / пустое состояние / список
-- [ ] Тулбар: "Выбрать все", "Снять выбор", "Обновить", статистика, "Удалить"
-- [ ] Заголовок таблицы: Название | Версия | Дата | Размер
-- [ ] Строки со `Checkbox`, сортировка по version_int
-- [ ] Кнопка "Удалить" disabled при `sel_count == 0 || operation_in_progress`
-- [ ] Пустое состояние: "Установленные версии 1С не найдены"
+- [x] `render_versions_tab` — spinner / пустое состояние / список
+- [x] Тулбар: "Выбрать все", "Снять выбор", "Обновить", статистика, "Удалить"
+- [x] Заголовок таблицы: Название | Версия | Дата | Размер
+- [x] Строки со `Checkbox`, сортировка по version_int
+- [x] Кнопка "Удалить" disabled при `sel_count == 0 || operation_in_progress`
+- [x] Пустое состояние: "Установленные версии 1С не найдены"
 
 ### 3.5 Вкладка «Кэш метаданных»
-- [ ] `render_cache_tab` — spinner / пустое состояние / список
-- [ ] Тулбар: "Выбрать все", "Снять выбор", "Выбрать осиротевшие", "Обновить", статистика, "Удалить кэш"
-- [ ] Строки: Checkbox + название базы + UUID (truncate) + размер
-- [ ] `start_delete_cache` — async удаление + `retain` списка
-- [ ] Пустое состояние: "Кэш метаданных 1С пуст"
+- [x] `render_cache_tab` — spinner / пустое состояние / список
+- [x] Тулбар: "Выбрать все", "Снять выбор", "Выбрать осиротевшие", "Обновить", статистика, "Удалить кэш"
+- [x] Строки: Checkbox + название базы + UUID (truncate) + размер
+- [x] `start_delete_cache` — async удаление + `retain` списка
+- [x] Пустое состояние: "Кэш метаданных 1С пуст"
 
 ### 3.6 Вкладка «Информационные базы»
-- [ ] `render_infobases_tab` — spinner / пустое состояние / список
-- [ ] Тулбар: "Выбрать все", "Снять выбор", "Обновить", статистика, "Удалить из списка"
-- [ ] Строки: Checkbox + название + тип (Файловая/Серверная) + версия + путь + размер
-- [ ] `start_delete_infobases` — async + `retain` списка
-- [ ] Пустое состояние: "Список информационных баз пуст"
+- [x] `render_infobases_tab` — spinner / пустое состояние / список
+- [x] Тулбар: "Выбрать все", "Снять выбор", "Обновить", статистика, "Удалить из списка"
+- [x] Строки: Checkbox + название + тип (Файловая/Серверная) + версия + путь + размер
+- [x] `start_delete_infobases` — async + `retain` списка
+- [x] Пустое состояние: "Список информационных баз пуст"
 
 ### 3.7 Вспомогательный render_empty_state
-- [ ] `render_empty_state(message, cx)` — централизованный рендер пустого состояния
-- [ ] Используется во всех трёх вкладках
+- [x] `render_empty_state(message, cx)` — централизованный рендер пустого состояния
+- [x] Используется во всех трёх вкладках
 
 ---
 
 ## Фаза 4: Операции
 
 ### 4.1 Удаление версий с прогрессом
-- [ ] `start_uninstall` — последовательный msiexec для каждой версии
-- [ ] Обновление `status_message` после каждой версии ("Удаление N из M...")
-- [ ] `versions.retain` после успешного удаления каждой
-- [ ] `operation_in_progress = false` в конце (всегда, в т.ч. при ошибке)
+- [x] `start_uninstall` — последовательный msiexec для каждой версии
+- [x] Обновление `status_message` после каждой версии ("Удаление N из M...")
+- [x] `versions.retain` после успешного удаления каждой
+- [x] `operation_in_progress = false` в конце (всегда, в т.ч. при ошибке)
 
 ### 4.2 Корректная обработка ошибок операций
-- [ ] Ошибки пишутся в `error_message`, не паникуют
-- [ ] `operation_in_progress` сбрасывается при любом исходе
-- [ ] При частичных ошибках (один элемент не удалился) операция продолжается для остальных
+- [x] Ошибки пишутся в `error_message`, не паникуют
+- [x] `operation_in_progress` сбрасывается при любом исходе
+- [x] При частичных ошибках (один элемент не удалился) операция продолжается для остальных
 
 ---
 
@@ -132,15 +132,15 @@
 ### 5.1 Качество кода
 - [ ] `cargo clippy -- --deny warnings` — нулевые предупреждения
 - [ ] `cargo fmt` — код отформатирован
-- [ ] Нет `unwrap()` в продакшн-коде
-- [ ] Все пользовательские строки на русском языке
+- [x] Нет `unwrap()` в продакшн-коде
+- [x] Все пользовательские строки на русском языке
 
 ### 5.2 Корректность поведения
-- [ ] Кнопки деструктивных операций: `disabled(sel_count == 0 || operation_in_progress)`
-- [ ] Бэкап `ibases.v8i` создаётся до любых изменений
-- [ ] UNC-пути (`\\server\share`) не удаляются физически
-- [ ] `Root::new(view, window, cx)` — первая view в окне
-- [ ] `gpui_component::init(cx)` вызывается до любых компонентов
+- [x] Кнопки деструктивных операций: `disabled(sel_count == 0 || operation_in_progress)`
+- [x] Бэкап `ibases.v8i` создаётся до любых изменений
+- [x] UNC-пути (`\\server\share`) не удаляются физически
+- [x] `Root::new(view, window, cx)` — первая view в окне
+- [x] `gpui_component::init(cx)` вызывается до любых компонентов
 
 ### 5.3 Финальная проверка
 - [ ] `cargo build --release` проходит без ошибок
