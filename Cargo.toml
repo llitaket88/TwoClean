@@ -8,14 +8,15 @@ gpui          = { git = "https://github.com/zed-industries/zed" }
 gpui_platform = { git = "https://github.com/zed-industries/zed", features = ["font-kit", "runtime_shaders"] }
 gpui-component        = { git = "https://github.com/longbridge/gpui-component", package = "gpui-component" }
 gpui-component-assets = { git = "https://github.com/longbridge/gpui-component", package = "gpui-component-assets" }
-anyhow  = "1"
-smol    = "2"
-winreg  = "0.10"
-walkdir = "2"
+anyhow  = "1.0.102"
+smol    = "2.0.2"
+winreg  = "0.56.0"
+walkdir = "2.5.0"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows = { version = "0.58", features = [
+windows = { version = "0.62.2", features = [
     "Win32_Graphics_Direct3D",
     "Win32_Graphics_Direct3D11",
     "Win32_Graphics_Dxgi",
+    "Win32_System_Registry",
 ] }
