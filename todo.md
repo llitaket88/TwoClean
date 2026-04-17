@@ -25,40 +25,40 @@
 ## Фаза 2: Платформенный слой
 
 ### 2.1 Утилиты (src/platform/utils.rs)
-- [ ] `get_dir_size(path: &Path) -> u64` — walkdir, рекурсивно, игнорировать ошибки
-- [ ] `format_size(bytes: u64) -> String` — ГБ / МБ / КБ / Б на русском
-- [ ] `parse_install_date(s: &str) -> String` — yyyyMMdd → yyyy-MM-dd
+- [x] `get_dir_size(path: &Path) -> u64` — walkdir, рекурсивно, игнорировать ошибки
+- [x] `format_size(bytes: u64) -> String` — ГБ / МБ / КБ / Б на русском
+- [x] `parse_install_date(s: &str) -> String` — yyyyMMdd → yyyy-MM-dd
 
 ### 2.2 Версии платформы (src/platform/versions.rs)
-- [ ] `get_installed_versions() -> Result<Vec<InstalledVersion>>`
-- [ ] Читать реестр: KEY_WOW64_32KEY и KEY_WOW64_64KEY
-- [ ] Фильтр Publisher: "1С-Софт" / "1C-Soft" / "1C" / "1С"
-- [ ] Вычислять `version_int` для сортировки
-- [ ] Дедупликация по UUID
-- [ ] Сортировка по `version_int`
-- [ ] `uninstall_version(uuid: &str) -> Result<bool>` — msiexec.exe /x{uuid} /q
+- [x] `get_installed_versions() -> Result<Vec<InstalledVersion>>`
+- [x] Читать реестр: KEY_WOW64_32KEY и KEY_WOW64_64KEY
+- [x] Фильтр Publisher: "1С-Софт" / "1C-Soft" / "1C" / "1С"
+- [x] Вычислять `version_int` для сортировки
+- [x] Дедупликация по UUID
+- [x] Сортировка по `version_int`
+- [x] `uninstall_version(uuid: &str) -> Result<bool>` — msiexec.exe /x{uuid} /q
 
 ### 2.3 Кэш метаданных (src/platform/cache.rs)
-- [ ] `get_cache_entries() -> Result<Vec<CacheEntry>>`
-- [ ] Искать директории `%LOCALAPPDATA%\1C\1cv8*\`
-- [ ] Фильтровать UUID-директории по regex
-- [ ] Считать размер каждой директории
-- [ ] `delete_cache_entry(path: &str) -> Result<()>`
+- [x] `get_cache_entries() -> Result<Vec<CacheEntry>>`
+- [x] Искать директории `%LOCALAPPDATA%\1C\1cv8*\`
+- [x] Фильтровать UUID-директории по regex
+- [x] Считать размер каждой директории
+- [x] `delete_cache_entry(path: &str) -> Result<()>`
 
 ### 2.4 Информационные базы (src/platform/infobases.rs)
-- [ ] `get_infobases_path() -> Result<PathBuf>` — %APPDATA%\1C\1CEStart\ibases.v8i
-- [ ] `get_info_bases() -> Result<Vec<InfoBase>>` — парсинг INI-формата
-- [ ] Определение `is_file_base` по Connect
-- [ ] `extract_file_path(connection) -> Option<String>` — File="path"; → path
-- [ ] Считать размер для файловых баз
-- [ ] `delete_info_bases(names: &[String]) -> Result<()>`
-- [ ] Создавать бэкап `ibases.v8i_backup_{timestamp}` до изменений
-- [ ] Удалять директории файловых баз (не UNC!)
-- [ ] Перезаписывать файл без удалённых секций
+- [x] `get_infobases_path() -> Result<PathBuf>` — %APPDATA%\1C\1CEStart\ibases.v8i
+- [x] `get_info_bases() -> Result<Vec<InfoBase>>` — парсинг INI-формата
+- [x] Определение `is_file_base` по Connect
+- [x] `extract_file_path(connection) -> Option<String>` — File="path"; → path
+- [x] Считать размер для файловых баз
+- [x] `delete_info_bases(names: &[String]) -> Result<()>`
+- [x] Создавать бэкап `ibases.v8i_backup_{timestamp}` до изменений
+- [x] Удалять директории файловых баз (не UNC!)
+- [x] Перезаписывать файл без удалённых секций
 
 ### 2.5 Реэкспорт
-- [ ] `src/platform/mod.rs` — pub use всех публичных функций
-- [ ] `cargo build` проходит без ошибок
+- [x] `src/platform/mod.rs` — pub use всех публичных функций
+- [x] `cargo build` проходит без ошибок
 
 ---
 
