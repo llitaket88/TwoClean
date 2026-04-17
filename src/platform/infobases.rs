@@ -24,7 +24,10 @@ pub fn get_info_bases() -> anyhow::Result<Vec<InfoBase>> {
     let content = std::fs::read_to_string(&path)
         .map_err(|e| anyhow::anyhow!("Не удалось прочитать ibases.v8i: {}", e))?;
 
-    let bases = parse_ibases_v8i(&content);
+    // Убираем UTF-8 BOM (\u{feff}) если присутствует
+    let content = content.strip_prefix('\u{feff}').unwrap_or(&content);
+
+    let bases = parse_ibases_v8i(content);
     Ok(bases)
 }
 
