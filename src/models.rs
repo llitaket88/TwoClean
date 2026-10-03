@@ -20,6 +20,7 @@ pub struct CacheEntry {
     pub display_name: String,
     pub size: u64,
     pub selected: bool,
+    pub connection: String,
 }
 
 #[derive(Debug, Clone)]

@@ -82,6 +82,7 @@ pub fn get_cache_entries() -> anyhow::Result<Vec<CacheEntry>> {
                 path: path_str,
                 uuid: sub_name,
                 display_name: "<База не найдена>".to_string(),
+                connection: "<Не подключено>".to_string(),
                 size,
                 selected: false, // будет скорректировано в app.rs
             });
