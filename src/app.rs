@@ -4,15 +4,11 @@ use gpui_kit::component::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
 use gpui_kit::component::spinner::Spinner;
-use gpui_kit::component::tab::{Tab, TabBar};
 use gpui_kit::component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
 use gpui_kit::prelude::FluentBuilder as _;
 use gpui_kit::*;
 
 pub struct TwoClearApp {
-    active_tab: usize,
-    versions: Vec<InstalledVersion>,
-    versions_loading: bool,
     cache_entries: Vec<CacheEntry>,
     cache_loading: bool,
     infobases: Vec<InfoBase>,
@@ -25,9 +21,6 @@ pub struct TwoClearApp {
 impl TwoClearApp {
     pub fn new(_window: &mut Window, cx: &mut Context<Self>) -> Self {
         let mut app = Self {
-            active_tab: 0,
-            versions: vec![],
-            versions_loading: false,
             cache_entries: vec![],
             cache_loading: false,
             infobases: vec![],
@@ -41,30 +34,7 @@ impl TwoClearApp {
     }
 
     fn load_all_data(&mut self, cx: &mut Context<Self>) {
-        self.load_versions(cx);
         self.load_infobases_and_cache(cx);
-    }
-
-    fn load_versions(&mut self, cx: &mut Context<Self>) {
-        self.versions_loading = true;
-        self.error_message = None;
-        cx.notify();
-        cx.spawn(async move |this, cx| {
-            let result = cx
-                .background_executor()
-                .spawn(async move { platform::get_installed_versions() })
-                .await;
-            this.update(cx, |app, cx| {
-                match result {
-                    Ok(v) => app.versions = v,
-                    Err(e) => app.error_message = Some(e.to_string()),
-                }
-                app.versions_loading = false;
-                cx.notify();
-            })
-            .ok();
-        })
-        .detach();
     }
 
     fn load_infobases_and_cache(&mut self, cx: &mut Context<Self>) {
@@ -122,57 +92,6 @@ impl TwoClearApp {
         .detach();
     }
 
-    fn start_uninstall(&mut self, cx: &mut Context<Self>) {
-        self.operation_in_progress = true;
-        cx.notify();
-
-        let to_delete: Vec<String> = self
-            .versions
-            .iter()
-            .filter(|v| v.selected)
-            .map(|v| v.uuid.clone())
-            .collect();
-        let total = to_delete.len();
-
-        cx.spawn(async move |this, cx| {
-            for (i, uuid) in to_delete.iter().enumerate() {
-                this.update(cx, |app, cx| {
-                    app.status_message = Some(format!("Удаление {} из {}...", i + 1, total));
-                    cx.notify();
-                })
-                .ok();
-
-                let uuid_clone = uuid.clone();
-                let result = cx
-                    .background_executor()
-                    .spawn(async move { platform::uninstall_version(&uuid_clone) })
-                    .await;
-
-                let uuid_for_retain = uuid.clone();
-                this.update(cx, |app, cx| {
-                    match result {
-                        Ok(true) => app.versions.retain(|v| v.uuid != uuid_for_retain),
-                        Ok(false) => {
-                            app.error_message =
-                                Some(format!("Не удалось удалить {}", uuid_for_retain))
-                        }
-                        Err(e) => app.error_message = Some(e.to_string()),
-                    }
-                    cx.notify();
-                })
-                .ok();
-            }
-
-            this.update(cx, |app, cx| {
-                app.operation_in_progress = false;
-                app.status_message = Some(format!("Готово. Обработано версий: {}", total));
-                cx.notify();
-            })
-            .ok();
-        })
-        .detach();
-    }
-
     fn start_delete_cache(&mut self, cx: &mut Context<Self>) {
         self.operation_in_progress = true;
         cx.notify();
@@ -205,53 +124,8 @@ impl TwoClearApp {
         .detach();
     }
 
-    fn start_delete_infobases(&mut self, cx: &mut Context<Self>) {
-        self.operation_in_progress = true;
-        cx.notify();
-
-        let names: Vec<String> = self
-            .infobases
-            .iter()
-            .filter(|ib| ib.selected)
-            .map(|ib| ib.name.clone())
-            .collect();
-        let count = names.len();
-
-        cx.spawn(async move |this, cx| {
-            let names_clone = names.clone();
-            let result = cx
-                .background_executor()
-                .spawn(async move { platform::delete_info_bases(&names_clone) })
-                .await;
-
-            this.update(cx, |app, cx| {
-                match result {
-                    Ok(_) => {
-                        app.infobases.retain(|ib| !names.contains(&ib.name));
-                        app.status_message = Some(format!("Удалено {} баз из списка", count));
-                    }
-                    Err(e) => app.error_message = Some(e.to_string()),
-                }
-                app.operation_in_progress = false;
-                cx.notify();
-            })
-            .ok();
-        })
-        .detach();
-    }
-
-    fn render_title_bar(&self, cx: &Context<Self>) -> impl IntoElement {
-        TitleBar::new().child(
-            TabBar::new("main-tabs")
-                .selected_index(self.active_tab)
-                .on_click(cx.listener(|this, ix: &usize, _window, cx| {
-                    this.active_tab = *ix;
-                    cx.notify();
-                }))
-                .child(Tab::new().label("Версии платформы"))
-                .child(Tab::new().label("Кэш метаданных"))
-                .child(Tab::new().label("Информационные базы")),
-        )
+    fn render_title_bar(&self, _cx: &Context<Self>) -> impl IntoElement {
+        TitleBar::new()
     }
 
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -286,154 +160,6 @@ impl TwoClearApp {
                     .text_color(cx.theme().muted_foreground)
                     .child(message.into()),
             )
-    }
-
-    fn render_versions_tab(&self, cx: &Context<Self>) -> impl IntoElement {
-        let total_size: u64 = self.versions.iter().map(|v| v.size).sum();
-        let sel_count = self.versions.iter().filter(|v| v.selected).count();
-        let sel_size: u64 = self
-            .versions
-            .iter()
-            .filter(|v| v.selected)
-            .map(|v| v.size)
-            .sum();
-
-        v_flex()
-            .size_full()
-            .child(
-                h_flex()
-                    .px_3()
-                    .py_2()
-                    .gap_2()
-                    .border_b_1()
-                    .border_color(cx.theme().border)
-                    .items_center()
-                    .child(
-                        Button::new("ver-select-all")
-                            .label("Выбрать все")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.versions.iter_mut().for_each(|v| v.selected = true);
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        Button::new("ver-deselect-all")
-                            .label("Снять выбор")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.versions.iter_mut().for_each(|v| v.selected = false);
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        Button::new("ver-reload")
-                            .label("Обновить")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.load_versions(cx);
-                            })),
-                    )
-                    .child(div().flex_1())
-                    .child(
-                        div()
-                            .text_sm()
-                            .text_color(cx.theme().muted_foreground)
-                            .child(format!(
-                                "Выбрано: {} ({}) / Всего: {}",
-                                sel_count,
-                                format_size(sel_size),
-                                format_size(total_size),
-                            )),
-                    )
-                    .child(
-                        Button::new("ver-delete")
-                            .label("Удалить выбранные")
-                            .small()
-                            .primary()
-                            .disabled(sel_count == 0 || self.operation_in_progress)
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.start_uninstall(cx);
-                            })),
-                    ),
-            )
-            .map(|this| {
-                if self.versions_loading {
-                    this.child(
-                        div()
-                            .flex_1()
-                            .flex()
-                            .items_center()
-                            .justify_center()
-                            .child(Spinner::new()),
-                    )
-                } else if self.versions.is_empty() {
-                    this.child(Self::render_empty_state(
-                        "Установленные версии 1С не найдены",
-                        cx,
-                    ))
-                } else {
-                    this.child(
-                        div()
-                            .id("ver-list")
-                            .flex_1()
-                            .overflow_y_scroll()
-                            .child(
-                                h_flex()
-                                    .px_3()
-                                    .py_1()
-                                    .gap_3()
-                                    .border_b_1()
-                                    .border_color(cx.theme().border)
-                                    .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
-                                    .child(div().w_5())
-                                    .child(div().flex_1().child("Название"))
-                                    .child(div().w(px(112.)).child("Версия"))
-                                    .child(div().w(px(112.)).child("Дата установки"))
-                                    .child(div().w_20().child("Размер")),
-                            )
-                            .children(self.versions.iter().enumerate().map(|(i, v)| {
-                                let name = v.name.clone();
-                                let version = v.version.clone();
-                                let date = v.install_date.clone();
-                                let size_str = format_size(v.size);
-                                h_flex()
-                                    .px_3()
-                                    .py_2()
-                                    .gap_3()
-                                    .border_b_1()
-                                    .border_color(cx.theme().border)
-                                    .items_center()
-                                    .child(
-                                        Checkbox::new(format!("ver-cb-{}", i))
-                                            .checked(v.selected)
-                                            .on_click(cx.listener(
-                                                move |this, checked: &bool, _, cx| {
-                                                    if i < this.versions.len() {
-                                                        this.versions[i].selected = *checked;
-                                                        cx.notify();
-                                                    }
-                                                },
-                                            )),
-                                    )
-                                    .child(div().flex_1().child(name))
-                                    .child(div().w(px(112.)).text_sm().child(version))
-                                    .child(
-                                        div()
-                                            .w(px(112.))
-                                            .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
-                                            .child(date),
-                                    )
-                                    .child(div().w_20().text_sm().child(size_str))
-                            })),
-                    )
-                }
-            })
     }
 
     fn render_cache_tab(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -559,7 +285,7 @@ impl TwoClearApp {
                             )
                             .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
                                 let display_name = e.display_name.clone();
-                                let uuid = e.uuid.clone();
+                                let _uuid = e.uuid.clone();
                                 let connection = e.connection.clone();
                                 let size_str = format_size(e.size);
                                 h_flex()
@@ -597,173 +323,6 @@ impl TwoClearApp {
                 }
             })
     }
-
-    fn render_infobases_tab(&self, cx: &Context<Self>) -> impl IntoElement {
-        let total_size: u64 = self.infobases.iter().map(|ib| ib.size).sum();
-        let sel_count = self.infobases.iter().filter(|ib| ib.selected).count();
-        let sel_size: u64 = self
-            .infobases
-            .iter()
-            .filter(|ib| ib.selected)
-            .map(|ib| ib.size)
-            .sum();
-
-        v_flex()
-            .size_full()
-            .child(
-                h_flex()
-                    .px_3()
-                    .py_2()
-                    .gap_2()
-                    .border_b_1()
-                    .border_color(cx.theme().border)
-                    .items_center()
-                    .child(
-                        Button::new("ib-select-all")
-                            .label("Выбрать все")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.infobases.iter_mut().for_each(|ib| ib.selected = true);
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        Button::new("ib-deselect-all")
-                            .label("Снять выбор")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.infobases.iter_mut().for_each(|ib| ib.selected = false);
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        Button::new("ib-reload")
-                            .label("Обновить")
-                            .small()
-                            .ghost()
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.load_infobases_and_cache(cx);
-                            })),
-                    )
-                    .child(div().flex_1())
-                    .child(
-                        div()
-                            .text_sm()
-                            .text_color(cx.theme().muted_foreground)
-                            .child(format!(
-                                "Выбрано: {} ({}) / Всего: {}",
-                                sel_count,
-                                format_size(sel_size),
-                                format_size(total_size),
-                            )),
-                    )
-                    .child(
-                        Button::new("ib-delete")
-                            .label("Удалить из списка")
-                            .small()
-                            .primary()
-                            .disabled(sel_count == 0 || self.operation_in_progress)
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.start_delete_infobases(cx);
-                            })),
-                    ),
-            )
-            .map(|this| {
-                if self.infobases_loading {
-                    this.child(
-                        div()
-                            .flex_1()
-                            .flex()
-                            .items_center()
-                            .justify_center()
-                            .child(Spinner::new()),
-                    )
-                } else if self.infobases.is_empty() {
-                    this.child(Self::render_empty_state(
-                        "Список информационных баз пуст",
-                        cx,
-                    ))
-                } else {
-                    this.child(
-                        div()
-                            .id("ib-list")
-                            .flex_1()
-                            .overflow_y_scroll()
-                            .child(
-                                h_flex()
-                                    .px_3()
-                                    .py_1()
-                                    .gap_3()
-                                    .border_b_1()
-                                    .border_color(cx.theme().border)
-                                    .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
-                                    .child(div().w_5())
-                                    .child(div().flex_1().child("Название"))
-                                    .child(div().w_24().child("Тип"))
-                                    .child(div().w_24().child("Версия"))
-                                    .child(div().w_48().child("Подключение"))
-                                    .child(div().w_20().child("Размер")),
-                            )
-                            .children(self.infobases.iter().enumerate().map(|(i, ib)| {
-                                let name = ib.name.clone();
-                                let type_str = if ib.is_file_base {
-                                    "Файловая"
-                                } else {
-                                    "Серверная"
-                                }
-                                .to_string();
-                                let ver_str = ib.version.clone().unwrap_or_default();
-                                let conn_str = ib.connection.clone();
-                                let size_str = if ib.size == 0 {
-                                    "—".to_string()
-                                } else {
-                                    format_size(ib.size)
-                                };
-                                h_flex()
-                                    .px_3()
-                                    .py_2()
-                                    .gap_3()
-                                    .border_b_1()
-                                    .border_color(cx.theme().border)
-                                    .items_center()
-                                    .child(
-                                        Checkbox::new(format!("ib-cb-{}", i))
-                                            .checked(ib.selected)
-                                            .on_click(cx.listener(
-                                                move |this, checked: &bool, _, cx| {
-                                                    if i < this.infobases.len() {
-                                                        this.infobases[i].selected = *checked;
-                                                        cx.notify();
-                                                    }
-                                                },
-                                            )),
-                                    )
-                                    .child(div().flex_1().child(name))
-                                    .child(div().w_24().text_sm().child(type_str))
-                                    .child(
-                                        div()
-                                            .w_24()
-                                            .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
-                                            .child(ver_str),
-                                    )
-                                    .child(
-                                        div()
-                                            .w_56()
-                                            .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
-                                            .overflow_hidden()
-                                            .child(conn_str),
-                                    )
-                                    .child(div().w_20().text_sm().child(size_str))
-                            })),
-                    )
-                }
-            })
-    }
 }
 
 impl Render for TwoClearApp {
@@ -776,12 +335,7 @@ impl Render for TwoClearApp {
                 div()
                     .flex_1()
                     .overflow_hidden()
-                    .map(|this| match self.active_tab {
-                        0 => this.child(self.render_versions_tab(cx)),
-                        1 => this.child(self.render_cache_tab(cx)),
-                        2 => this.child(self.render_infobases_tab(cx)),
-                        _ => this,
-                    }),
+                    .child(self.render_cache_tab(cx)),
             )
             .child(self.render_status_bar(cx))
     }
