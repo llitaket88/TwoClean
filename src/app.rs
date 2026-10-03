@@ -279,13 +279,11 @@ impl TwoClearApp {
                                     .text_color(cx.theme().muted_foreground)
                                     .child(div().w_5())
                                     .child(div().flex_1().child("База"))
-                                    // .child(div().w_64().child("UUID"))
                                     .child(div().w_96().child("Строка подключения"))
                                     .child(div().w_20().child("Размер кэша")),
                             )
                             .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
                                 let display_name = e.display_name.clone();
-                                let _uuid = e.uuid.clone();
                                 let connection = e.connection.clone();
                                 let size_str = format_size(e.size);
                                 h_flex()
@@ -308,14 +306,6 @@ impl TwoClearApp {
                                             )),
                                     )
                                     .child(div().flex_1().child(display_name))
-                                    // .child(
-                                    //     div()
-                                    //         .w_64()
-                                    //         .text_xs()
-                                    //         .text_color(cx.theme().muted_foreground)
-                                    //         .overflow_hidden()
-                                    //         .child(uuid),
-                                    // )
                                     .child(div().w_96().text_sm().child(connection))
                                     .child(div().w_20().text_sm().child(size_str))
                             })),
