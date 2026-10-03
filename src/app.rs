@@ -1,13 +1,13 @@
 use crate::platform::format_size;
 use crate::{models::*, platform};
-use gpui::prelude::FluentBuilder as _;
-use gpui::*;
-use gpui_component::Disableable;
-use gpui_component::button::{Button, ButtonVariants};
-use gpui_component::checkbox::Checkbox;
-use gpui_component::spinner::Spinner;
-use gpui_component::tab::{Tab, TabBar};
-use gpui_component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
+use gpui_kit::component::Disableable;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::checkbox::Checkbox;
+use gpui_kit::component::spinner::Spinner;
+use gpui_kit::component::tab::{Tab, TabBar};
+use gpui_kit::component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
+use gpui_kit::prelude::FluentBuilder as _;
+use gpui_kit::*;
 
 pub struct TwoClearApp {
     active_tab: usize,
