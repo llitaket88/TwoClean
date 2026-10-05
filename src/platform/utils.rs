@@ -31,15 +31,6 @@ pub fn format_size(bytes: u64) -> String {
     }
 }
 
-/// Преобразует дату из формата "yyyyMMdd" в "yyyy-MM-dd".
-/// Если строка не соответствует формату — возвращает исходную строку.
-pub fn parse_install_date(s: &str) -> String {
-    if s.len() != 8 || !s.chars().all(|c| c.is_ascii_digit()) {
-        return s.to_string();
-    }
-    format!("{}-{}-{}", &s[0..4], &s[4..6], &s[6..8])
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -65,18 +56,5 @@ mod tests {
     #[test]
     fn test_format_size_gb() {
         assert_eq!(format_size(1_073_741_824), "1.0 ГБ");
-    }
-
-    #[test]
-    fn test_parse_install_date_valid() {
-        assert_eq!(parse_install_date("20230415"), "2023-04-15");
-        assert_eq!(parse_install_date("20001231"), "2000-12-31");
-    }
-
-    #[test]
-    fn test_parse_install_date_invalid() {
-        assert_eq!(parse_install_date("2023041"), "2023041");
-        assert_eq!(parse_install_date("abcdefgh"), "abcdefgh");
-        assert_eq!(parse_install_date(""), "");
     }
 }

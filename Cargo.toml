@@ -1,19 +1,14 @@
 [package]
-name = "TwoClear"
-version = "0.1.0"
+name = "TwoClean"
+version = "1.0.0"
 edition = "2024"
+build = "build.rs"
 
 [dependencies]
+anyhow  = "1.0.4"
 gpui-kit = "0.7"
-anyhow  = "1.0.102"
-smol    = "2.0.2"
-winreg  = "0.56.0"
+uuid = "1.27.0"
 walkdir = "2.5.0"
 
-[target.'cfg(target_os = "windows")'.dependencies]
-windows = { version = "0.62.2", features = [
-    "Win32_Graphics_Direct3D",
-    "Win32_Graphics_Direct3D11",
-    "Win32_Graphics_Dxgi",
-    "Win32_System_Registry",
-] }
+[build-dependencies]
+winres = "0.1"
