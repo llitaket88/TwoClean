@@ -129,7 +129,12 @@ impl TwoClearApp {
     }
 
     fn render_title_bar(&self, cx: &Context<Self>) -> impl IntoElement {
-        TitleBar::new().child(div().text_sm().text_color(cx.theme().muted_foreground).child("TwoClear - Очистка кэша 1С"))
+        TitleBar::new().child(
+            div()
+                .text_sm()
+                .text_color(cx.theme().muted_foreground)
+                .child("TwoClear - Очистка кэша 1С"),
+        )
     }
 
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -279,9 +284,9 @@ impl TwoClearApp {
                             .flex_1()
                             .overflow_y_scroll()
                             .child(
-                                div()
-                                    .p_3()
-                                    .child(Alert::new("running-alert", "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена."))
+                                div().p_3().child(
+                                    Alert::new("running-alert", "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена."),
+                                ),
                             )
                             .child(
                                 h_flex()
