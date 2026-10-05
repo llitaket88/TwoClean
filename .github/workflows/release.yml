@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,8 +15,6 @@ jobs:
 
     permissions:
       contents: write
-      id-token: none
-      attestations: none
 
     steps:
       - name: Checkout repository
@@ -43,13 +40,11 @@ jobs:
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: \${{ github.ref_name }}
+          name: Release \${{ github.ref_name }}
           body: |
-            # Новая версия ${{ github.ref_name }}
+            # Новая версия \${{ github.ref_name }}
 
             ## Установка
             Скачайте файл `TwoClean.exe` и запустите его.
