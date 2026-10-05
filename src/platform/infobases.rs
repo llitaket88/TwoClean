@@ -73,8 +73,6 @@ fn parse_ibases_v8i(content: &str) -> Vec<InfoBase> {
 }
 
 fn split_key_value(line: &str) -> Option<(&str, &str)> {
-    let pos = line.find('=')?;
-    let key = line[..pos].trim();
-    let value = line[pos + 1..].trim();
-    Some((key, value))
+    let (key, value) = line.split_once('=')?;
+    Some((key.trim(), value.trim()))
 }
