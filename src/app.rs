@@ -131,6 +131,7 @@ impl TwoCleanApp {
     fn render_title_bar(&self, cx: &Context<Self>) -> impl IntoElement {
         TitleBar::new().child(
             div()
+                .pl_3()
                 .text_sm()
                 .text_color(cx.theme().muted_foreground)
                 .child("TwoClean - Очистка кэша 1С"),
@@ -160,7 +161,7 @@ impl TwoCleanApp {
                 div()
                     .text_sm()
                     .text_color(cx.theme().muted_foreground)
-                    .child(format!("Version: {}", self.version)),
+                    .child(format!("Версия {}", self.version)),
             )
     }
 
