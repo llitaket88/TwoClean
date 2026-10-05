@@ -125,7 +125,7 @@ impl TwoClearApp {
     }
 
     fn render_title_bar(&self, _cx: &Context<Self>) -> impl IntoElement {
-        TitleBar::new()
+        TitleBar::new().child("TwoClear - Очистка кэша 1С")
     }
 
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -220,7 +220,7 @@ impl TwoClearApp {
                     )
                     .child(
                         Button::new("cache-reload")
-                            .label("Обновить")
+                            .label("Обновить список")
                             .small()
                             .ghost()
                             .on_click(cx.listener(|this, _, _, cx| {

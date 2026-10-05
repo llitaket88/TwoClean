@@ -16,7 +16,7 @@ fn main() {
         };
 
         open_window(window_options, cx, |window, cx| {
-            window.set_window_title("TwoClear — Очистка 1С");
+            window.set_window_title("TwoClear - Очистка кэша 1С");
             let view = cx.new(|cx| app::TwoClearApp::new(window, cx));
             cx.new(|cx| Root::new(view, window, cx))
         })
