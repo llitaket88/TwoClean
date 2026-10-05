@@ -31,7 +31,7 @@ impl TwoClearApp {
             operation_in_progress: false,
             status_message: None,
             error_message: None,
-            version: version,
+            version,
         };
         app.load_all_data(cx);
         app
