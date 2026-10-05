@@ -3,11 +3,11 @@ name: Build and Publish New Release
 on:
   push:
     tags:
-      - "v*" # Запускается при создании тега версии (например, v1.0.0)
-  workflow_dispatch: # Возможность запуска вручную
+      - "v*"
+  workflow_dispatch:
 
 permissions:
-  contents: write # Разрешение на создание релизов и загрузку файлов
+  contents: write
 
 jobs:
   build:
