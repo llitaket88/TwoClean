@@ -1,4 +1,4 @@
-// Модели данных для TwoClear
+// Модели данных
 
 #[derive(Debug, Clone)]
 pub struct CacheEntry {

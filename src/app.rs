@@ -9,7 +9,7 @@ use gpui_kit::component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
 use gpui_kit::prelude::FluentBuilder as _;
 use gpui_kit::*;
 
-pub struct TwoClearApp {
+pub struct TwoCleanApp {
     cache_entries: Vec<CacheEntry>,
     cache_loading: bool,
     infobases: Vec<InfoBase>,
@@ -20,7 +20,7 @@ pub struct TwoClearApp {
     version: &'static str,
 }
 
-impl TwoClearApp {
+impl TwoCleanApp {
     pub fn new(_window: &mut Window, cx: &mut Context<Self>) -> Self {
         let version = env!("CARGO_PKG_VERSION");
         let mut app = Self {
@@ -133,7 +133,7 @@ impl TwoClearApp {
             div()
                 .text_sm()
                 .text_color(cx.theme().muted_foreground)
-                .child("TwoClear - Очистка кэша 1С"),
+                .child("TwoClean - Очистка кэша 1С"),
         )
     }
 
@@ -298,7 +298,7 @@ impl TwoClearApp {
                                     .text_sm()
                                     .text_color(cx.theme().muted_foreground)
                                     .child(div().w_5())
-                                    .child(div().w_1_2().child("База"))
+                                    .child(div().w_1_2().child("Наименование информационной базы"))
                                     .child(div().w_1_2().child("Строка подключения"))
                                     .child(div().w_24().child("Размер кэша")),
                             )
@@ -326,8 +326,8 @@ impl TwoClearApp {
                                             )),
                                     )
                                     .child(div().w_1_2().child(display_name))
-                                    .child(div().w_1_2().text_sm().child(connection))
-                                    .child(div().w_24().text_sm().child(size_str))
+                                    .child(div().w_1_2().child(connection))
+                                    .child(div().w_24().child(size_str))
                             })),
                     )
                 }
@@ -335,7 +335,7 @@ impl TwoClearApp {
     }
 }
 
-impl Render for TwoClearApp {
+impl Render for TwoCleanApp {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         v_flex()
             .size_full()

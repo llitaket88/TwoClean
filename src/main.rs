@@ -1,4 +1,5 @@
 #![windows_subsystem = "windows"]
+
 mod app;
 mod models;
 mod platform;
@@ -13,12 +14,13 @@ fn main() {
         let window_options = WindowOptions {
             titlebar: Some(TitleBar::title_bar_options()),
             window_bounds: Some(WindowBounds::centered(size(px(1024.), px(640.)), cx)),
+            window_min_size: Some(size(px(1024.), px(640.))),
             ..Default::default()
         };
 
         open_window(window_options, cx, |window, cx| {
-            window.set_window_title("TwoClear - Очистка кэша 1С");
-            let view = cx.new(|cx| app::TwoClearApp::new(window, cx));
+            window.set_window_title("TwoClean - Очистка кэша 1С");
+            let view = cx.new(|cx| app::TwoCleanApp::new(window, cx));
             cx.new(|cx| Root::new(view, window, cx))
         })
         .expect("Failed to open window");
