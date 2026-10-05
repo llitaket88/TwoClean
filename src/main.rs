@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 mod app;
 mod models;
 mod platform;
@@ -11,7 +12,7 @@ fn main() {
 
         let window_options = WindowOptions {
             titlebar: Some(TitleBar::title_bar_options()),
-            window_bounds: Some(WindowBounds::centered(size(px(900.), px(640.)), cx)),
+            window_bounds: Some(WindowBounds::centered(size(px(1024.), px(640.)), cx)),
             ..Default::default()
         };
 

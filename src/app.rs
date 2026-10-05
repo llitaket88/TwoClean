@@ -1,6 +1,7 @@
 use crate::platform::format_size;
 use crate::{models::*, platform};
 use gpui_kit::component::Disableable;
+use gpui_kit::component::alert::Alert;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
 use gpui_kit::component::spinner::Spinner;
@@ -241,7 +242,7 @@ impl TwoClearApp {
                     )
                     .child(
                         Button::new("cache-delete")
-                            .label("Удалить кэш")
+                            .label("Очистить кэш")
                             .small()
                             .primary()
                             .disabled(sel_count == 0 || self.operation_in_progress)
@@ -268,6 +269,10 @@ impl TwoClearApp {
                             .id("cache-list")
                             .flex_1()
                             .overflow_y_scroll()
+                            .child(Alert::new(
+                                "running-1c-alert",
+                                "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена.",
+                            ))
                             .child(
                                 h_flex()
                                     .px_3()
@@ -279,8 +284,8 @@ impl TwoClearApp {
                                     .text_color(cx.theme().muted_foreground)
                                     .child(div().w_5())
                                     .child(div().flex_1().child("База"))
-                                    .child(div().w_96().child("Строка подключения"))
-                                    .child(div().w_20().child("Размер кэша")),
+                                    .child(div().w_80().child("Строка подключения"))
+                                    .child(div().w_24().child("Размер кэша")),
                             )
                             .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
                                 let display_name = e.display_name.clone();
@@ -306,8 +311,8 @@ impl TwoClearApp {
                                             )),
                                     )
                                     .child(div().flex_1().child(display_name))
-                                    .child(div().w_96().text_sm().child(connection))
-                                    .child(div().w_20().text_sm().child(size_str))
+                                    .child(div().w_80().text_sm().child(connection))
+                                    .child(div().w_24().text_sm().child(size_str))
                             })),
                     )
                 }
