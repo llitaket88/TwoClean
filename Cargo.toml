@@ -4,6 +4,7 @@ version = "1.0.0"
 edition = "2024"
 
 [dependencies]
+anyhow  = "1.0.4"
 gpui-kit = "0.7"
-anyhow  = "1.0.0"
+uuid = "1.27.0"
 walkdir = "2.5.0"
