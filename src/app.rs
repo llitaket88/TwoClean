@@ -17,10 +17,12 @@ pub struct TwoClearApp {
     operation_in_progress: bool,
     status_message: Option<String>,
     error_message: Option<String>,
+    version: &'static str,
 }
 
 impl TwoClearApp {
     pub fn new(_window: &mut Window, cx: &mut Context<Self>) -> Self {
+        let version = env!("CARGO_PKG_VERSION");
         let mut app = Self {
             cache_entries: vec![],
             cache_loading: false,
@@ -29,6 +31,7 @@ impl TwoClearApp {
             operation_in_progress: false,
             status_message: None,
             error_message: None,
+            version: version,
         };
         app.load_all_data(cx);
         app
@@ -125,8 +128,8 @@ impl TwoClearApp {
         .detach();
     }
 
-    fn render_title_bar(&self, _cx: &Context<Self>) -> impl IntoElement {
-        TitleBar::new().child("TwoClear - Очистка кэша 1С")
+    fn render_title_bar(&self, cx: &Context<Self>) -> impl IntoElement {
+        TitleBar::new().child(div().text_sm().text_color(cx.theme().muted_foreground).child("TwoClear - Очистка кэша 1С"))
     }
 
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -148,6 +151,12 @@ impl TwoClearApp {
                     this
                 }
             }))
+            .child(
+                div()
+                    .text_sm()
+                    .text_color(cx.theme().muted_foreground)
+                    .child(format!("Version: {}", self.version)),
+            )
     }
 
     fn render_empty_state(message: impl Into<String>, cx: &Context<Self>) -> impl IntoElement {
@@ -269,10 +278,11 @@ impl TwoClearApp {
                             .id("cache-list")
                             .flex_1()
                             .overflow_y_scroll()
-                            .child(Alert::new(
-                                "running-1c-alert",
-                                "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена.",
-                            ))
+                            .child(
+                                div()
+                                    .p_3()
+                                    .child(Alert::new("running-alert", "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена."))
+                            )
                             .child(
                                 h_flex()
                                     .px_3()
@@ -283,8 +293,8 @@ impl TwoClearApp {
                                     .text_sm()
                                     .text_color(cx.theme().muted_foreground)
                                     .child(div().w_5())
-                                    .child(div().flex_1().child("База"))
-                                    .child(div().w_80().child("Строка подключения"))
+                                    .child(div().w_1_2().child("База"))
+                                    .child(div().w_1_2().child("Строка подключения"))
                                     .child(div().w_24().child("Размер кэша")),
                             )
                             .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
@@ -310,8 +320,8 @@ impl TwoClearApp {
                                                 },
                                             )),
                                     )
-                                    .child(div().flex_1().child(display_name))
-                                    .child(div().w_80().text_sm().child(connection))
+                                    .child(div().w_1_2().child(display_name))
+                                    .child(div().w_1_2().text_sm().child(connection))
                                     .child(div().w_24().text_sm().child(size_str))
                             })),
                     )
