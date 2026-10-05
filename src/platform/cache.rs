@@ -1,25 +1,13 @@
 // src/platform/cache.rs — чтение и удаление кэша метаданных 1C
 
 use std::path::Path;
+use uuid::Uuid;
 
 use crate::{models::CacheEntry, platform::utils::get_dir_size};
 
-/// Проверяет, является ли имя директории UUID (8-4-4-4-12 hex)
+/// Проверяет, является ли имя директории UUID
 fn is_uuid_dir(name: &str) -> bool {
-    let parts: Vec<&str> = name.split('-').collect();
-    if parts.len() != 5 {
-        return false;
-    }
-    let expected_lens = [8, 4, 4, 4, 12];
-    for (part, &expected_len) in parts.iter().zip(expected_lens.iter()) {
-        if part.len() != expected_len {
-            return false;
-        }
-        if !part.chars().all(|c| c.is_ascii_hexdigit()) {
-            return false;
-        }
-    }
-    true
+    Uuid::try_parse(name).is_ok()
 }
 
 /// Возвращает список записей кэша метаданных 1C из %LOCALAPPDATA%\1C\1cv8*\{UUID}
