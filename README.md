@@ -4,12 +4,12 @@
 
 **Очистка локального кэша 1С:Предприятие — быстро и без лишнего**
 
-![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
-![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
-![GPUI](https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge)
+[![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)](https://www.microsoft.com/windows)
+[![GPUI](https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge)](https://gpui-kit.com/)
 
 [![Issues](https://img.shields.io/github/issues/llitaket88/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/issues)
-[![Stars](https://img.shields.io/github/stars/USERNAME/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/stargazers)
+[![Stars](https://img.shields.io/github/stars/llitaket88/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/llitaket88/TwoClean/pulls)
 [![Fork of OneCleaner](https://img.shields.io/badge/fork%20of-OneCleaner-blue?style=flat-square&logo=github)](https://github.com/vbondarevsky/OneCleaner)
 
@@ -46,8 +46,8 @@ TwoClean — форк с минимальным функционалом про�
 
 При разработке использовались ИИ-ассистенты: **Claude** (Anthropic) и **ChatGPT** (OpenAI).
 
-![Claude](https://img.shields.io/badge/Claude-D97757?style=flat-square&logo=anthropic&logoColor=white)
-![ChatGPT](https://img.shields.io/badge/ChatGPT-10A37F?style=flat-square&logo=openai&logoColor=white)
+[![Claude](https://img.shields.io/badge/Claude-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://claude.ai/)
+[![ChatGPT](https://img.shields.io/badge/ChatGPT-10A37F?style=flat-square&logo=openai&logoColor=white)](https://chatgpt.com/)
 
 ## Участие
 
