@@ -1,67 +1,154 @@
 <div align="center">
 
-# ![Icon](icon.ico) TwoClean
+# ![TwoClean](icon.ico) TwoClean
 
-**Очистка локального кэша 1С:Предприятие — быстро и без лишнего**
+### Быстрая очистка локального кэша 1С:Предприятие в Windows
 
-[![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
-[![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)](https://www.microsoft.com/windows)
-[![GPUI](https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge)](https://gpui-kit.com/)
+<p>
+  <strong>Найти устаревший кэш. Выбрать базы. Очистить.</strong>
+</p>
 
-[![Issues](https://img.shields.io/github/issues/llitaket88/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/issues)
-[![Stars](https://img.shields.io/github/stars/llitaket88/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/llitaket88/TwoClean/pulls)
-[![Fork of OneCleaner](https://img.shields.io/badge/fork%20of-OneCleaner-blue?style=flat-square&logo=github)](https://github.com/vbondarevsky/OneCleaner)
+<p>
+  <a href="https://github.com/llitaket88/TwoClean/releases">
+    <img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release">
+  </a>
+  <a href="https://github.com/llitaket88/TwoClean/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/llitaket88/TwoClean/build.yml?style=for-the-badge&label=build" alt="Build">
+  </a>
+</p>
+
+<p>
+  <a href="https://www.rust-lang.org/">
+    <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust">
+  </a>
+  <a href="https://www.microsoft.com/windows">
+    <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11">
+  </a>
+  <a href="https://gpui-kit.com/">
+    <img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit">
+  </a>
+</p>
+
+<p>
+  <a href="https://github.com/llitaket88/TwoClean/issues">Issues</a>
+  ·
+  <a href="https://github.com/llitaket88/TwoClean/releases">Releases</a>
+  ·
+  <a href="https://github.com/llitaket88/TwoClean/pulls">Pull Requests</a>
+</p>
 
 </div>
 
 ---
 
+## О TwoClean
+
+**TwoClean** — небольшая Windows-утилита для очистки локального кэша **1С:Предприятие**.
+
+Программа позволяет выбрать нужные информационные базы для очистки, а также обнаружить **осиротевшие каталоги кэша** — остатки от баз, которые больше не используются.
+
+> Не требует установки, работает локально и не отправляет пользовательские данные в сеть.
+
 ## Возможности
 
-- **Выбор баз данных** для очистки
-- **Поиск и выбор осиротевших каталогов** — устаревший кэш баз, которых уже нет в списке
+- 🗂️ **Выбор баз** — очистка кэша конкретных информационных баз.
+- 🔎 **Поиск осиротевших каталогов** — обнаружение кэша баз, которых больше нет в текущем списке.
+- ☑️ **Выборочная очистка** — перед удалением можно выбрать нужные элементы.
+- ⚡ **Минимум действий** — запустил, выбрал, очистил.
+- 🔒 **Локальная работа** — сетевое подключение для работы программы не требуется.
+
+## Скриншот
+
+<div align="center">
+
+<!-- Замените путь на актуальный скриншот -->
+
+<img src="docs/screenshot.png" alt="TwoClean" width="800">
+
+</div>
+
+## Быстрый старт
+
+1. Откройте раздел [Releases](https://github.com/llitaket88/TwoClean/releases).
+2. Скачайте последний `.exe`.
+3. Запустите `TwoClean.exe`.
+4. Выберите базы или осиротевшие каталоги.
+5. Выполните очистку.
+
+**Установка не требуется.**
 
 ## Системные требования
 
-- Windows 10 / 11
+| Требование  | Значение        |
+| ----------- | --------------- |
+| ОС          | Windows 10 / 11 |
+| Архитектура | x64             |
+| Установка   | Не требуется    |
+| Интернет    | Не требуется    |
 
-## Установка и приватность
+## Безопасность и приватность
 
-- **Установка не требуется** — программа поставляется в виде одного исполняемого файла (`.exe`) для Windows, достаточно скачать и запустить
-- **Никакие данные никуда не передаются** — программа работает полностью локально и не обращается к сети
+TwoClean работает локально на компьютере пользователя.
 
-## Стек
+- Данные информационных баз не отправляются на внешние серверы.
+- Для работы приложения подключение к интернету не требуется.
+- Программа не требует отдельного сервера или облачного сервиса.
+- Удаляются только выбранные пользователем элементы.
 
-- [Rust](https://www.rust-lang.org/)
-- [gpui-kit](https://gpui-kit.com/) — UI на базе GPUI
+> Перед очисткой необходимо закрыть запущенные экземпляры **1С:Предприятия**, использующие соответствующий кэш.
 
-## О проекте
+## Почему TwoClean?
 
-TwoClean — форк с минимальным функционалом проекта [OneCleaner](https://github.com/vbondarevsky/OneCleaner).
+TwoClean задуман как небольшая специализированная утилита без лишних функций.
 
-Проект написан для профессиональных целей, а также ради изучения Rust и GPUI.
+**Вместо:**
+
+> установка → настройка → регистрация → лишние функции
+
+**Получаем:**
+
+> скачать → запустить → выбрать → очистить
+
+## Технологии
+
+- **[Rust](https://www.rust-lang.org/)** — основной язык разработки.
+- **[GPUI](https://www.gpui.rs/)** / **[gpui-kit](https://gpui-kit.com/)** — графический интерфейс.
+
+## Проект
+
+TwoClean — форк проекта **[OneCleaner](https://github.com/vbondarevsky/OneCleaner)** с более узким набором функций.
+
+Проект развивается в первую очередь для практического применения и одновременно является учебным проектом для изучения **Rust** и **GPUI**.
 
 ### Использование ИИ
 
-При разработке использовались ИИ-ассистенты: **Claude** (Anthropic) и **ChatGPT** (OpenAI).
+В процессе разработки использовались ИИ-ассистенты:
 
-[![Claude](https://img.shields.io/badge/Claude-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://claude.ai/)
-[![ChatGPT](https://img.shields.io/badge/ChatGPT-10A37F?style=flat-square&logo=openai&logoColor=white)](https://chatgpt.com/)
+- **[Claude](https://claude.ai/)** — Anthropic
+- **[ChatGPT](https://chatgpt.com/)** — OpenAI
+
+ИИ использовался как инструмент разработки: для анализа, поиска решений, рефакторинга, работы с документацией личного обучения.
 
 ## Участие
 
-Буду рад любой обратной связи:
+Буду рад обратной связи и contributions.
 
-- **Пожелания и идеи** — создайте [issue](https://github.com/llitaket88/TwoClean/issues)
-- **Нашли баг?** — расскажите в [issues](https://github.com/llitaket88/TwoClean/issues)
-- **Хотите присоединиться к разработке?** — форкайте репозиторий и отправляйте [pull request](https://github.com/llitaket88/TwoClean/pulls)
+- 🐛 Нашли ошибку? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
+- 💡 Есть идея или предложение? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
+- 🔧 Хотите внести изменения? Откройте [pull request](https://github.com/llitaket88/TwoClean/pulls).
+- ⭐ Нравится проект? Поставьте [звезду](https://github.com/llitaket88/TwoClean/stargazers).
 
-Новичкам в Rust тоже рады — это учебный проект.
+Новичкам в Rust тоже рады — проект подходит для изучения языка на практике.
+
+## Лицензия
+
+Информация о лицензии находится в файле [LICENSE](LICENSE).
 
 ---
 
 <div align="center">
+
+**TwoClean**
 
 Сделано с ❤️ на Rust
 
