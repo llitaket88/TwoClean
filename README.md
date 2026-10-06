@@ -47,9 +47,24 @@
 
 ## Скриншоты
 
-<div align="center">
-<a href="images/screenshot_light.png"><img src="images/screenshot_light.png" alt="TwoClean — светлая тема" width="400"></a>&nbsp;&nbsp;<a href="images/screenshot_dark.png"><img src="images/screenshot_dark.png" alt="TwoClean — тёмная тема" width="400"></a>
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <a href="images/screenshot_light.png">
+        <img src="images/screenshot_light.png" width="400" alt="TwoClean — светлая тема">
+      </a>
+    </td>
+    <td align="center">
+      <a href="images/screenshot_dark.png">
+        <img src="images/screenshot_dark.png" width="400" alt="TwoClean — тёмная тема">
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Светлая тема</sub></td>
+    <td align="center"><sub>Тёмная тема</sub></td>
+  </tr>
+</table>
 
 
 ## Быстрый старт
