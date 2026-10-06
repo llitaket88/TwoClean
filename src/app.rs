@@ -101,7 +101,16 @@ impl TwoCleanApp {
     }
 
     fn start_delete_cache(&mut self, cx: &mut Context<Self>) {
+        if platform::has_running_1c_processes() {
+            self.error_message = Some(
+                "Обнаружены запущенные процессы 1С. Пожалуйста, закройте все базы и повторите попытку.".to_string(),
+            );
+            cx.notify();
+            return;
+        }
+
         self.operation_in_progress = true;
+        self.error_message = None;
         cx.notify();
 
         let paths: Vec<String> = self

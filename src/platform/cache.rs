@@ -1,5 +1,4 @@
 // src/platform/cache.rs — чтение и удаление кэша метаданных 1C
-
 use std::path::Path;
 use uuid::Uuid;
 

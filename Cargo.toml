@@ -1,14 +1,16 @@
 [package]
 name = "TwoClean"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2024"
 build = "build.rs"
 
 [dependencies]
 anyhow  = "1.0.4"
 gpui-kit = "0.7"
+sysinfo = "0.39.6"
 uuid = "1.27.0"
 walkdir = "2.5.0"
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_UI_WindowsAndMessaging"] }
 
 [build-dependencies]
 winres = "0.1"
