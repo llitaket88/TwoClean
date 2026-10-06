@@ -53,9 +53,9 @@ TwoClean — форк с минимальным функционалом про�
 
 Буду рад любой обратной связи:
 
-- 💡 **Пожелания и идеи** — создайте [issue](https://github.com/USERNAME/TwoClean/issues)
-- 🐛 **Нашли баг?** — расскажите в [issues](https://github.com/USERNAME/TwoClean/issues)
-- 🚀 **Хотите присоединиться к разработке?** — форкайте репозиторий и отправляйте [pull request](https://github.com/USERNAME/TwoClean/pulls)
+- 💡 **Пожелания и идеи** — создайте [issue](https://github.com/llitaket88/TwoClean/issues)
+- 🐛 **Нашли баг?** — расскажите в [issues](https://github.com/llitaket88/TwoClean/issues)
+- 🚀 **Хотите присоединиться к разработке?** — форкайте репозиторий и отправляйте [pull request](https://github.com/llitaket88/TwoClean/pulls)
 
 Новичкам в Rust тоже рады — это учебный проект.
 
