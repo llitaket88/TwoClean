@@ -3,10 +3,11 @@ use crate::{models::*, platform};
 use gpui_kit::component::alert::Alert;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
+use gpui_kit::component::empty::{Empty, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle};
 use gpui_kit::component::separator::Separator;
 use gpui_kit::component::spinner::Spinner;
 use gpui_kit::component::status_bar::StatusBar;
-use gpui_kit::component::{ActiveTheme, Sizable, Theme, ThemeMode, TitleBar, h_flex, v_flex};
+use gpui_kit::component::{ActiveTheme, Icon, Sizable, Theme, ThemeMode, TitleBar, h_flex, v_flex};
 use gpui_kit::component::{Disableable, IconName};
 use gpui_kit::prelude::FluentBuilder as _;
 use gpui_kit::*;
@@ -187,16 +188,19 @@ impl TwoCleanApp {
     }
 
     fn render_empty_state(message: impl Into<String>, cx: &Context<Self>) -> impl IntoElement {
-        div()
-            .size_full()
-            .flex()
-            .items_center()
-            .justify_center()
-            .child(
-                div()
-                    .text_color(cx.theme().muted_foreground)
-                    .child(message.into()),
-            )
+        Empty::new().header(
+            EmptyHeader::new()
+                .media(
+                    EmptyMedia::new()
+                        .with_variant(EmptyMediaVariant::Icon)
+                        .child(Icon::new(IconName::Folder)),
+                )
+                .title(
+                    EmptyTitle::new()
+                        .text_color(cx.theme().muted_foreground)
+                        .child(message.into()),
+                ),
+        )
     }
 
     fn render_cache_tab(&self, cx: &Context<Self>) -> impl IntoElement {
