@@ -127,10 +127,6 @@ TwoClean - форк проекта **[OneCleaner](https://github.com/vbondarevsk
 
 Новичкам в Rust тоже рады - проект подходит для изучения языка на практике.
 
-## Лицензия
-
-Информация о лицензии находится в файле [LICENSE](LICENSE).
-
 ---
 
 <div align="center">
