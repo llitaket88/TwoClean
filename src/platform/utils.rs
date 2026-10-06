@@ -1,5 +1,6 @@
 // src/platform/utils.rs — утилиты платформенного слоя
-
+//
+use sysinfo::{ProcessesToUpdate, System};
 use walkdir::WalkDir;
 use windows::{
     Win32::{
@@ -46,17 +47,13 @@ pub struct SingleInstance {
 impl SingleInstance {
     pub fn new(name: &str) -> Option<Self> {
         let name: Vec<u16> = name.encode_utf16().chain(std::iter::once(0)).collect();
-
         let handle = unsafe { CreateMutexW(None, false, PCWSTR(name.as_ptr())) }.ok()?;
-
         if unsafe { GetLastError() } == ERROR_ALREADY_EXISTS {
             unsafe {
                 let _ = CloseHandle(handle);
             }
-
             return None;
         }
-
         Some(Self { handle })
     }
 }
@@ -69,12 +66,10 @@ impl Drop for SingleInstance {
     }
 }
 
-/// Показыват сообщение о запущенном приложении
+/// Отображает сообщение о запущенном приложении
 pub fn show_already_running_message() {
     let title: Vec<u16> = "Внимание\0".encode_utf16().collect();
-
     let message: Vec<u16> = "Приложение уже запущено!\0".encode_utf16().collect();
-
     unsafe {
         let _ = MessageBoxW(
             None,
@@ -83,4 +78,16 @@ pub fn show_already_running_message() {
             MB_OK | MB_ICONINFORMATION,
         );
     }
+}
+
+/// Проверка запущенных процессов 1с
+pub fn has_running_1c_processes() -> bool {
+    let mut system = System::new();
+    system.refresh_processes(ProcessesToUpdate::All, true);
+
+    system.processes().values().any(|process| {
+        let name = process.name().to_string_lossy().to_ascii_lowercase();
+
+        name.starts_with("1cv8") && name.ends_with(".exe")
+    })
 }
