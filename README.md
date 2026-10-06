@@ -61,8 +61,8 @@
     </td>
   </tr>
   <tr>
-    <td align="center"><sub>Светлая тема</sub></td>
-    <td align="center"><sub>Тёмная тема</sub></td>
+    <td align="center">Светлая тема</td>
+    <td align="center">Тёмная тема</td>
   </tr>
 </table>
 
