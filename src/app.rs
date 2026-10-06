@@ -1,11 +1,13 @@
 use crate::platform::format_size;
 use crate::{models::*, platform};
-use gpui_kit::component::Disableable;
 use gpui_kit::component::alert::Alert;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
+use gpui_kit::component::separator::Separator;
 use gpui_kit::component::spinner::Spinner;
-use gpui_kit::component::{ActiveTheme, Sizable, TitleBar, h_flex, v_flex};
+use gpui_kit::component::status_bar::StatusBar;
+use gpui_kit::component::{ActiveTheme, Sizable, Theme, ThemeMode, TitleBar, h_flex, v_flex};
+use gpui_kit::component::{Disableable, IconName};
 use gpui_kit::prelude::FluentBuilder as _;
 use gpui_kit::*;
 
@@ -89,6 +91,7 @@ impl TwoCleanApp {
                 app.cache_entries = cache;
                 app.infobases_loading = false;
                 app.cache_loading = false;
+                app.status_message = Some("Кэш загружен".to_string());
                 cx.notify();
             })
             .ok();
@@ -139,15 +142,8 @@ impl TwoCleanApp {
     }
 
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
-        h_flex()
-            .h_7()
-            .px_3()
-            .gap_2()
-            .items_center()
-            .border_t_1()
-            .border_color(cx.theme().border)
-            .bg(cx.theme().tab_bar)
-            .child(div().flex_1().text_sm().map(|this| {
+        StatusBar::new()
+            .left(div().text_sm().map(|this| {
                 if let Some(err) = &self.error_message {
                     this.text_color(cx.theme().danger).child(err.clone())
                 } else if let Some(msg) = &self.status_message {
@@ -157,11 +153,33 @@ impl TwoCleanApp {
                     this
                 }
             }))
-            .child(
-                div()
-                    .text_sm()
+            .right("")
+            .right(Separator::vertical())
+            .right(
+                Button::new("theme-mod-switcher")
+                    .ghost()
+                    .xsmall()
                     .text_color(cx.theme().muted_foreground)
-                    .child(format!("Версия {}", self.version)),
+                    .icon(IconName::Moon)
+                    .tooltip("Переключить тему")
+                    .when(cx.theme().is_dark(), |el| el.icon(IconName::Sun))
+                    .on_click(cx.listener(|_, _, window, cx| {
+                        let mode = match cx.theme().is_dark() {
+                            true => ThemeMode::Light,
+                            false => ThemeMode::Dark,
+                        };
+                        Theme::change(mode, Some(window), cx);
+                    })),
+            )
+            .right(Separator::vertical())
+            .right(
+                Button::new("version")
+                    .ghost()
+                    .xsmall()
+                    .icon(IconName::Github)
+                    .tooltip("Текущая версия")
+                    .text_color(cx.theme().muted_foreground)
+                    .label(format!("v{}", self.version)),
             )
     }
 
@@ -227,6 +245,7 @@ impl TwoCleanApp {
                             .label("Выбрать осиротевшие")
                             .small()
                             .ghost()
+                            .tooltip("Неиспользуемый кэш ранее присутствующих в списке баз")
                             .on_click(cx.listener(|this, _, _, cx| {
                                 this.cache_entries.iter_mut().for_each(|e| {
                                     e.selected = e.display_name == "<База не найдена>";
@@ -286,7 +305,11 @@ impl TwoCleanApp {
                             .overflow_y_scroll()
                             .child(
                                 div().p_3().child(
-                                    Alert::new("running-alert", "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена."),
+                                    Alert::new(
+                                        "running-alert",
+                                        "Для корректной очистки кэша необходимо закрыть все базы данных. Перед очисткой убедитесь, что 1С не запущена.",
+                                    )
+                                    .text_color(cx.theme().muted_foreground),
                                 ),
                             )
                             .child(
