@@ -8,11 +8,6 @@ use gpui_kit::component::{Root, Theme, TitleBar};
 use gpui_kit::*;
 
 fn main() {
-    let Some(_instance) = platform::SingleInstance::new("TwoClean_UniqueMutex") else {
-        platform::show_already_running_message();
-        return;
-    };
-
     application().with_assets(assets::Assets).run(|cx| {
         init(cx);
 
