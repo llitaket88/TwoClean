@@ -177,9 +177,12 @@ impl TwoCleanApp {
                     .ghost()
                     .xsmall()
                     .icon(IconName::Github)
-                    .tooltip("Текущая версия")
+                    .tooltip("О программе")
                     .text_color(cx.theme().muted_foreground)
-                    .label(format!("v{}", self.version)),
+                    .label(format!("v{}", self.version))
+                    .on_click(|_, _, cx| {
+                        cx.open_url("https://github.com/llitaket88/TwoClean");
+                    }),
             )
     }
 
