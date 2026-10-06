@@ -1,3 +1,5 @@
+<div align="center">
+
 # ![Icon](icon.ico) TwoClean
 
 **Очистка локального кэша 1С:Предприятие — быстро и без лишнего**
@@ -10,6 +12,8 @@
 [![Stars](https://img.shields.io/github/stars/USERNAME/TwoClean?style=flat-square)](https://github.com/USERNAME/TwoClean/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/USERNAME/TwoClean/pulls)
 [![Fork of OneCleaner](https://img.shields.io/badge/fork%20of-OneCleaner-blue?style=flat-square&logo=github)](https://github.com/vbondarevsky/OneCleaner)
+
+</div>
 
 ---
 
@@ -57,4 +61,8 @@ TwoClean — форк с минимальным функционалом про�
 
 ---
 
+<div align="center">
+
 Сделано с ❤️ на Rust
+
+</div>
