@@ -9,11 +9,24 @@
 </p>
 
 <p>
-  <a href="https://github.com/llitaket88/TwoClean/releases"><img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release"></a><a href="https://github.com/llitaket88/TwoClean/actions"><img src="https://img.shields.io/github/actions/workflow/status/llitaket88/TwoClean/build.yml?style=for-the-badge&label=build" alt="Build"></a>
+  <a href="https://github.com/llitaket88/TwoClean/releases">
+    <img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release">
+  </a>
+  <a href="https://github.com/llitaket88/TwoClean/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/llitaket88/TwoClean/build.yml?style=for-the-badge&label=build" alt="Build">
+  </a>
 </p>
 
 <p>
-  <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust"></a><a href="https://www.microsoft.com/windows"><img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11"></a><a href="https://gpui-kit.com/"><img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit"></a>
+  <a href="https://www.rust-lang.org/">
+    <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust">
+  </a>
+  <a href="https://www.microsoft.com/windows">
+    <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11">
+  </a>
+  <a href="https://gpui-kit.com/">
+    <img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit">
+  </a>
 </p>
 
 <p>
@@ -38,11 +51,11 @@
 
 ## Возможности
 
-- 🗂️ **Выбор баз** — очистка кэша конкретных информационных баз.
-- 🔎 **Поиск осиротевших каталогов** — обнаружение кэша баз, которых больше нет в текущем списке.
-- ☑️ **Выборочная очистка** — перед удалением можно выбрать нужные элементы.
-- ⚡ **Минимум действий** — запустил, выбрал, очистил.
-- 🔒 **Локальная работа** — сетевое подключение для работы программы не требуется.
+* 🗂️ **Выбор баз** — очистка кэша конкретных информационных баз.
+* 🔎 **Поиск осиротевших каталогов** — обнаружение кэша баз, которых больше нет в текущем списке.
+* ☑️ **Выборочная очистка** — перед удалением можно выбрать нужные элементы.
+* ⚡ **Минимум действий** — запустил, выбрал, очистил.
+* 🔒 **Локальная работа** — сетевое подключение для работы программы не требуется.
 
 ## Скриншот
 
@@ -77,10 +90,10 @@
 
 TwoClean работает локально на компьютере пользователя.
 
-- Данные информационных баз не отправляются на внешние серверы.
-- Для работы приложения подключение к интернету не требуется.
-- Программа не требует отдельного сервера или облачного сервиса.
-- Удаляются только выбранные пользователем элементы.
+* Данные информационных баз не отправляются на внешние серверы.
+* Для работы приложения подключение к интернету не требуется.
+* Программа не требует отдельного сервера или облачного сервиса.
+* Удаляются только выбранные пользователем элементы.
 
 > Перед очисткой необходимо закрыть запущенные экземпляры **1С:Предприятия**, использующие соответствующий кэш.
 
@@ -98,8 +111,8 @@ TwoClean задуман как небольшая специализирован
 
 ## Технологии
 
-- **[Rust](https://www.rust-lang.org/)** — основной язык разработки.
-- **[GPUI](https://www.gpui.rs/)** / **[gpui-kit](https://gpui-kit.com/)** — графический интерфейс.
+* **[Rust](https://www.rust-lang.org/)** — основной язык разработки.
+* **[GPUI](https://www.gpui.rs/)** / **[gpui-kit](https://gpui-kit.com/)** — графический интерфейс.
 
 ## Проект
 
@@ -111,8 +124,8 @@ TwoClean — форк проекта **[OneCleaner](https://github.com/vbondarev
 
 В процессе разработки использовались ИИ-ассистенты:
 
-- **[Claude](https://claude.ai/)** — Anthropic
-- **[ChatGPT](https://chatgpt.com/)** — OpenAI
+* **[Claude](https://claude.ai/)** — Anthropic
+* **[ChatGPT](https://chatgpt.com/)** — OpenAI
 
 ИИ использовался как инструмент разработки: для анализа, поиска решений, рефакторинга, работы с документацией личного обучения.
 
@@ -120,10 +133,10 @@ TwoClean — форк проекта **[OneCleaner](https://github.com/vbondarev
 
 Буду рад обратной связи и contributions.
 
-- 🐛 Нашли ошибку? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
-- 💡 Есть идея или предложение? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
-- 🔧 Хотите внести изменения? Откройте [pull request](https://github.com/llitaket88/TwoClean/pulls).
-- ⭐ Нравится проект? Поставьте [звезду](https://github.com/llitaket88/TwoClean/stargazers).
+* 🐛 Нашли ошибку? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
+* 💡 Есть идея или предложение? Создайте [issue](https://github.com/llitaket88/TwoClean/issues).
+* 🔧 Хотите внести изменения? Откройте [pull request](https://github.com/llitaket88/TwoClean/pulls).
+* ⭐ Нравится проект? Поставьте [звезду](https://github.com/llitaket88/TwoClean/stargazers).
 
 Новичкам в Rust тоже рады — проект подходит для изучения языка на практике.
 
