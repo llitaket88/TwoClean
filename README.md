@@ -8,9 +8,9 @@
 ![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
 ![GPUI](https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge)
 
-[![Issues](https://img.shields.io/github/issues/USERNAME/TwoClean?style=flat-square)](https://github.com/USERNAME/TwoClean/issues)
-[![Stars](https://img.shields.io/github/stars/USERNAME/TwoClean?style=flat-square)](https://github.com/USERNAME/TwoClean/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/USERNAME/TwoClean/pulls)
+[![Issues](https://img.shields.io/github/issues/llitaket88/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/issues)
+[![Stars](https://img.shields.io/github/stars/USERNAME/TwoClean?style=flat-square)](https://github.com/llitaket88/TwoClean/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/llitaket88/TwoClean/pulls)
 [![Fork of OneCleaner](https://img.shields.io/badge/fork%20of-OneCleaner-blue?style=flat-square&logo=github)](https://github.com/vbondarevsky/OneCleaner)
 
 </div>
