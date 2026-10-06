@@ -4,7 +4,7 @@ mod app;
 mod models;
 mod platform;
 
-use gpui_kit::component::{Root, TitleBar};
+use gpui_kit::component::{Root, Theme, TitleBar};
 use gpui_kit::*;
 
 fn main() {
@@ -19,7 +19,10 @@ fn main() {
         };
 
         open_window(window_options, cx, |window, cx| {
+            Theme::sync_system_appearance(Some(window), cx);
             window.set_window_title("TwoClean - Очистка кэша 1С");
+            window.activate_window();
+
             let view = cx.new(|cx| app::TwoCleanApp::new(window, cx));
             cx.new(|cx| Root::new(view, window, cx))
         })
