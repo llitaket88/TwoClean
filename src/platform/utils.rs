@@ -1,14 +1,6 @@
 // src/platform/utils.rs — утилиты платформенного слоя
 
 use walkdir::WalkDir;
-use windows::{
-    Win32::{
-        Foundation::{CloseHandle, ERROR_ALREADY_EXISTS, GetLastError, HANDLE},
-        System::Threading::CreateMutexW,
-        UI::WindowsAndMessaging::{MB_ICONINFORMATION, MB_OK, MessageBoxW},
-    },
-    core::PCWSTR,
-};
 
 /// Рекурсивно вычисляет размер директории в байтах.
 pub fn get_dir_size(path: &std::path::Path) -> u64 {
@@ -39,48 +31,30 @@ pub fn format_size(bytes: u64) -> String {
     }
 }
 
-pub struct SingleInstance {
-    handle: HANDLE,
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-impl SingleInstance {
-    pub fn new(name: &str) -> Option<Self> {
-        let name: Vec<u16> = name.encode_utf16().chain(std::iter::once(0)).collect();
-
-        let handle = unsafe { CreateMutexW(None, false, PCWSTR(name.as_ptr())) }.ok()?;
-
-        if unsafe { GetLastError() } == ERROR_ALREADY_EXISTS {
-            unsafe {
-                let _ = CloseHandle(handle);
-            }
-
-            return None;
-        }
-
-        Some(Self { handle })
+    #[test]
+    fn test_format_size_bytes() {
+        assert_eq!(format_size(0), "0 Б");
+        assert_eq!(format_size(512), "512 Б");
+        assert_eq!(format_size(1023), "1023 Б");
     }
-}
 
-impl Drop for SingleInstance {
-    fn drop(&mut self) {
-        unsafe {
-            let _ = CloseHandle(self.handle);
-        }
+    #[test]
+    fn test_format_size_kb() {
+        assert_eq!(format_size(1024), "1.0 КБ");
+        assert_eq!(format_size(2048), "2.0 КБ");
     }
-}
 
-/// Показыват сообщение о запущенном приложении
-pub fn show_already_running_message() {
-    let title: Vec<u16> = "Внимание\0".encode_utf16().collect();
+    #[test]
+    fn test_format_size_mb() {
+        assert_eq!(format_size(1_048_576), "1.0 МБ");
+    }
 
-    let message: Vec<u16> = "Приложение уже запущено!\0".encode_utf16().collect();
-
-    unsafe {
-        let _ = MessageBoxW(
-            None,
-            PCWSTR(message.as_ptr()),
-            PCWSTR(title.as_ptr()),
-            MB_OK | MB_ICONINFORMATION,
-        );
+    #[test]
+    fn test_format_size_gb() {
+        assert_eq!(format_size(1_073_741_824), "1.0 ГБ");
     }
 }
