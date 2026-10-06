@@ -9,24 +9,11 @@
 </p>
 
 <p>
-  <a href="https://github.com/llitaket88/TwoClean/releases">
-    <img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release">
-  </a>
-  <a href="https://github.com/llitaket88/TwoClean/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/llitaket88/TwoClean/build.yml?style=for-the-badge&label=build" alt="Build">
-  </a>
+  <a href="https://github.com/llitaket88/TwoClean/releases"><img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release"></a>&nbsp;&nbsp;<a href="https://github.com/llitaket88/TwoClean/actions"><img src="https://img.shields.io/github/actions/workflow/status/llitaket88/TwoClean/build.yml?style=for-the-badge&label=build" alt="Build"></a>
 </p>
 
 <p>
-  <a href="https://www.rust-lang.org/">
-    <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust">
-  </a>
-  <a href="https://www.microsoft.com/windows">
-    <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11">
-  </a>
-  <a href="https://gpui-kit.com/">
-    <img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit">
-  </a>
+  <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust"></a>&nbsp;&nbsp;<a href="https://www.microsoft.com/windows"><img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11"></a>&nbsp;&nbsp;<a href="https://gpui-kit.com/"><img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit"></a>
 </p>
 
 <p>
@@ -58,15 +45,12 @@
 * 🔒 **Локальная работа** — сетевое подключение для работы программы не требуется.
 * 🔆 **Темная и светлая темы** - автометическое определение и установка системного оформления 
 
-## Скриншот
+## Скриншоты
 
 <div align="center">
-
-<!-- Замените путь на актуальный скриншот -->
-
-<img src="images/screenshot.png" alt="TwoClean">
-
+<a href="images/screenshot_light.png"><img src="images/screenshot_light.png" alt="TwoClean — светлая тема" width="400"></a>&nbsp;&nbsp;<a href="images/screenshot_dark.png"><img src="images/screenshot_dark.png" alt="TwoClean — тёмная тема" width="400"></a>
 </div>
+
 
 ## Быстрый старт
 
