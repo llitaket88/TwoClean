@@ -9,7 +9,7 @@
 </p>
 
 <p>
-  <a href="https://github.com/llitaket88/TwoClean/releases"><img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release"></a>&nbsp;&nbsp;<a href="https://gpui-kit.com/"><img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit"></a>&nbsp;&nbsp;<a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/CODE-RUST-F54927?style=for-the-badge" alt="Rust"></a>&nbsp;&nbsp;<a href="https://www.microsoft.com/windows"><img src="https://img.shields.io/badge/Windows-10%2F11-00CF64?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11"></a>
+  <a href="https://github.com/llitaket88/TwoClean/releases"><img src="https://img.shields.io/github/v/release/llitaket88/TwoClean?style=for-the-badge&label=release" alt="Latest Release"></a>&nbsp;&nbsp;<a href="https://www.microsoft.com/windows"><img src="https://img.shields.io/badge/Windows-10%2F11-00CF64?style=for-the-badge&logo=windows11&logoColor=white" alt="Windows 10/11"></a>&nbsp;&nbsp;<a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/CODE-RUST-F54927?style=for-the-badge" alt="Rust"></a>&nbsp;&nbsp;<a href="https://gpui-kit.com/"><img src="https://img.shields.io/badge/UI-gpui--kit-7C3AED?style=for-the-badge" alt="gpui-kit"></a>
 </p>
 
 <p>
