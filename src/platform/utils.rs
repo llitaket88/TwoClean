@@ -1,5 +1,6 @@
-// src/platform/utils.rs — утилиты платформенного слоя
-//
+use gpui_http_client::{HttpClient, github::latest_github_release};
+use std::sync::Arc;
+
 use sysinfo::{ProcessesToUpdate, System};
 use walkdir::WalkDir;
 use windows::{
@@ -90,14 +91,10 @@ pub fn has_running_1c_processes() -> bool {
     })
 }
 
-/// Проверяет наличие новой версии программы
-pub fn check_updates(version: &str) -> Option<&'static str> {
-    let latest_version = "1.2.0";
-
-    let version = version.strip_prefix("v").unwrap_or(version);
-    if latest_version != version {
-        Some(latest_version)
-    } else {
-        None
+/// Получает данные о новой версии программы с GitHub
+pub async fn get_data_from_github(http_client: Arc<dyn HttpClient>) -> Option<String> {
+    match latest_github_release("llitaket88/TwoClean", false, false, http_client).await {
+        Ok(release) => Some(release.tag_name.trim_start_matches("v").to_string()),
+        Err(_e) => None,
     }
 }
