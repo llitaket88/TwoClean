@@ -4,6 +4,7 @@ use gpui_kit::component::alert::Alert;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
 use gpui_kit::component::empty::{Empty, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle};
+use gpui_kit::component::popover::Popover;
 use gpui_kit::component::separator::Separator;
 use gpui_kit::component::spinner::Spinner;
 use gpui_kit::component::status_bar::StatusBar;
@@ -21,6 +22,8 @@ pub struct TwoCleanApp {
     status_message: Option<String>,
     error_message: Option<String>,
     version: &'static str,
+    new_available_version: Option<String>,
+    popover_open: bool,
 }
 
 impl TwoCleanApp {
@@ -35,9 +38,30 @@ impl TwoCleanApp {
             status_message: None,
             error_message: None,
             version,
+            new_available_version: None,
+            popover_open: false,
         };
+        app.check_for_updates(cx);
         app.load_all_data(cx);
         app
+    }
+
+    fn check_for_updates(&mut self, cx: &mut Context<Self>) {
+        let http_client = cx.http_client().clone();
+        let current_version = self.version;
+
+        cx.spawn(async move |this, cx| {
+            if let Some(new_version) = platform::get_data_from_github(http_client).await {
+                if new_version != current_version {
+                    let _ = this.update(cx, |app, cx| {
+                        app.new_available_version = Some(new_version);
+                        app.popover_open = true;
+                        cx.notify();
+                    });
+                }
+            }
+        })
+        .detach();
     }
 
     fn load_all_data(&mut self, cx: &mut Context<Self>) {
@@ -151,6 +175,31 @@ impl TwoCleanApp {
         )
     }
 
+    fn render_update_notification(&self) -> impl IntoElement {
+        let update = match &self.new_available_version {
+            Some(version) => {
+                let message = format!("Текущая: v{}. Новая версия v{}", self.version, version);
+                let button_label = "Скачать";
+                let button_url = "https://github.com/llitaket88/TwoClean/releases/latest";
+                (message, button_label, button_url)
+            }
+            None => (
+                "Вы используете последнюю версию".to_string(),
+                "О программе",
+                "https://github.com/llitaket88/TwoClean",
+            ),
+        };
+        v_flex().gap_2().child(update.0).child(
+            Button::new("update-link")
+                .secondary()
+                .small()
+                .label(update.1)
+                .on_click(|_, _, cx| {
+                    cx.open_url(update.2);
+                }),
+        )
+    }
+
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
         StatusBar::new()
             .left(div().text_sm().map(|this| {
@@ -183,16 +232,32 @@ impl TwoCleanApp {
             )
             .right(Separator::vertical())
             .right(
-                Button::new("version")
-                    .ghost()
-                    .xsmall()
-                    .icon(IconName::Github)
-                    .tooltip("О программе")
-                    .text_color(cx.theme().muted_foreground)
-                    .label(format!("v{}", self.version))
-                    .on_click(|_, _, cx| {
-                        cx.open_url("https://github.com/llitaket88/TwoClean");
-                    }),
+                Popover::new("anchored")
+                    .open(self.popover_open)
+                    .on_open_change(cx.listener(|this, open: &bool, _, cx| {
+                        this.popover_open = *open;
+                        cx.notify();
+                    }))
+                    .anchor(Anchor::BottomRight)
+                    .offset(px(8.))
+                    .arrow(true)
+                    .trigger(
+                        Button::new("version")
+                            .ghost()
+                            .xsmall()
+                            .icon(IconName::Github)
+                            .tooltip("О программе")
+                            .label(format!("v{}", self.version))
+                            .when(self.new_available_version.is_some(), |el| {
+                                el.danger()
+                                    .label("Доступна новая версия")
+                                    .tooltip("Доступна новая версия")
+                            })
+                            .when(self.new_available_version.is_none(), |el| {
+                                el.text_color(cx.theme().muted_foreground)
+                            }),
+                    )
+                    .child(self.render_update_notification()),
             )
     }
 

@@ -1,4 +1,4 @@
-#![windows_subsystem = "windows"]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod app;
 mod models;
@@ -6,6 +6,8 @@ mod platform;
 
 use gpui_kit::component::{Root, Theme, TitleBar};
 use gpui_kit::*;
+use reqwest_client::ReqwestClient;
+use std::sync::Arc;
 
 fn main() {
     let Some(_instance) = platform::SingleInstance::new("TwoClean_UniqueMutex") else {
@@ -15,6 +17,9 @@ fn main() {
 
     application().with_assets(assets::Assets).run(|cx| {
         init(cx);
+
+        let http_client = Arc::new(ReqwestClient::user_agent("TwoClean-exe").unwrap());
+        cx.set_http_client(http_client);
 
         let window_options = WindowOptions {
             titlebar: Some(TitleBar::title_bar_options()),
