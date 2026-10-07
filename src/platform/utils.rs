@@ -84,10 +84,20 @@ pub fn show_already_running_message() {
 pub fn has_running_1c_processes() -> bool {
     let mut system = System::new();
     system.refresh_processes(ProcessesToUpdate::All, true);
-
     system.processes().values().any(|process| {
         let name = process.name().to_string_lossy().to_ascii_lowercase();
-
         name.starts_with("1cv8") && name.ends_with(".exe")
     })
+}
+
+/// Проверяет наличие новой версии программы
+pub fn check_updates(version: &str) -> Option<&'static str> {
+    let latest_version = "1.2.0";
+
+    let version = version.strip_prefix("v").unwrap_or(version);
+    if latest_version != version {
+        Some(latest_version)
+    } else {
+        None
+    }
 }

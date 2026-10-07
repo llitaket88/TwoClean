@@ -1,9 +1,10 @@
-use crate::platform::format_size;
+use crate::platform::{check_updates, format_size};
 use crate::{models::*, platform};
 use gpui_kit::component::alert::Alert;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
 use gpui_kit::component::empty::{Empty, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle};
+use gpui_kit::component::popover::Popover;
 use gpui_kit::component::separator::Separator;
 use gpui_kit::component::spinner::Spinner;
 use gpui_kit::component::status_bar::StatusBar;
@@ -21,11 +22,13 @@ pub struct TwoCleanApp {
     status_message: Option<String>,
     error_message: Option<String>,
     version: &'static str,
+    new_available_version: Option<&'static str>,
 }
 
 impl TwoCleanApp {
     pub fn new(_window: &mut Window, cx: &mut Context<Self>) -> Self {
         let version = env!("CARGO_PKG_VERSION");
+        let new_available_version = check_updates(version);
         let mut app = Self {
             cache_entries: vec![],
             cache_loading: false,
@@ -35,6 +38,7 @@ impl TwoCleanApp {
             status_message: None,
             error_message: None,
             version,
+            new_available_version,
         };
         app.load_all_data(cx);
         app
@@ -151,6 +155,31 @@ impl TwoCleanApp {
         )
     }
 
+    fn render_update_notification(&self) -> impl IntoElement {
+        let update = match self.new_available_version {
+            Some(version) => {
+                let message = format!("Доступна новая версия {}", version);
+                let button_label = "Скачать";
+                let button_url = "https://github.com/llitaket88/TwoClean/releases/latest";
+                (message, button_label, button_url)
+            }
+            None => (
+                "Вы используете последнюю версию".to_string(),
+                "О программе",
+                "https://github.com/llitaket88/TwoClean",
+            ),
+        };
+        v_flex().gap_2().child(update.0).child(
+            Button::new("update-link")
+                .secondary()
+                .small()
+                .label(update.1)
+                .on_click(|_, _, cx| {
+                    cx.open_url(update.2);
+                }),
+        )
+    }
+
     fn render_status_bar(&self, cx: &Context<Self>) -> impl IntoElement {
         StatusBar::new()
             .left(div().text_sm().map(|this| {
@@ -183,16 +212,20 @@ impl TwoCleanApp {
             )
             .right(Separator::vertical())
             .right(
-                Button::new("version")
-                    .ghost()
-                    .xsmall()
-                    .icon(IconName::Github)
-                    .tooltip("О программе")
-                    .text_color(cx.theme().muted_foreground)
-                    .label(format!("v{}", self.version))
-                    .on_click(|_, _, cx| {
-                        cx.open_url("https://github.com/llitaket88/TwoClean");
-                    }),
+                Popover::new("anchored")
+                    .anchor(Anchor::BottomRight)
+                    .offset(px(8.))
+                    .arrow(true)
+                    .trigger(
+                        Button::new("version")
+                            .ghost()
+                            .xsmall()
+                            .icon(IconName::Github)
+                            .tooltip("О программе")
+                            .text_color(cx.theme().muted_foreground)
+                            .label(format!("v{}", self.version)),
+                    )
+                    .child(self.render_update_notification()),
             )
     }
 
