@@ -5,6 +5,7 @@ use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::checkbox::Checkbox;
 use gpui_kit::component::empty::{Empty, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle};
 use gpui_kit::component::popover::Popover;
+use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::component::separator::Separator;
 use gpui_kit::component::spinner::Spinner;
 use gpui_kit::component::status_bar::StatusBar;
@@ -51,14 +52,15 @@ impl TwoCleanApp {
         let current_version = self.version;
 
         cx.spawn(async move |this, cx| {
-            if let Some(new_version) = platform::get_data_from_github(http_client).await {
-                if new_version != current_version {
-                    let _ = this.update(cx, |app, cx| {
-                        app.new_available_version = Some(new_version);
-                        app.popover_open = true;
-                        cx.notify();
-                    });
-                }
+            if let Some(new_version) = platform::get_data_from_github(http_client).await
+                && new_version != current_version
+            {
+                this.update(cx, |app, cx| {
+                    app.new_available_version = Some(new_version);
+                    app.popover_open = true;
+                    cx.notify();
+                })
+                .ok();
             }
         })
         .detach();
@@ -178,7 +180,7 @@ impl TwoCleanApp {
     fn render_update_notification(&self) -> impl IntoElement {
         let update = match &self.new_available_version {
             Some(version) => {
-                let message = format!("Текущая: v{}. Новая версия v{}", self.version, version);
+                let message = format!("Текущая: v{}. Доступна: v{}.", self.version, version);
                 let button_label = "Скачать";
                 let button_url = "https://github.com/llitaket88/TwoClean/releases/latest";
                 (message, button_label, button_url)
@@ -380,10 +382,8 @@ impl TwoCleanApp {
                     this.child(Self::render_empty_state("Кэш метаданных 1С пуст", cx))
                 } else {
                     this.child(
-                        div()
-                            .id("cache-list")
+                        v_flex()
                             .flex_1()
-                            .overflow_y_scroll()
                             .child(
                                 div().p_3().child(
                                     Alert::new(
@@ -402,40 +402,48 @@ impl TwoCleanApp {
                                     .border_color(cx.theme().border)
                                     .text_sm()
                                     .text_color(cx.theme().muted_foreground)
-                                    .child(div().w_5())
+                                    .child(div().w_7())
                                     .child(div().w_1_2().child("Наименование информационной базы"))
                                     .child(div().w_1_2().child("Строка подключения"))
-                                    .child(div().w_24().child("Размер кэша")),
+                                    .child(div().w_24().pr_2().text_right().child("Размер кэша")),
                             )
-                            .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
-                                let display_name = e.display_name.clone();
-                                let connection = e.connection.clone();
-                                let size_str = format_size(e.size);
-                                h_flex()
-                                    .px_3()
-                                    .py_2()
-                                    .gap_3()
-                                    .border_b_1()
-                                    .border_color(cx.theme().border)
-                                    .items_center()
-                                    .child(
-                                        Checkbox::new(format!("cache-cb-{}", i))
-                                            .checked(e.selected)
-                                            .on_click(cx.listener(
-                                                move |this, checked: &bool, _, cx| {
-                                                    if i < this.cache_entries.len() {
-                                                        this.cache_entries[i].selected = *checked;
-                                                        cx.notify();
-                                                    }
-                                                },
-                                            )),
-                                    )
-                                    .child(div().w_1_2().child(display_name))
-                                    .child(div().w_1_2().child(connection))
-                                    .child(div().w_24().child(size_str))
-                            })),
-                    )
-                }
+                            .child(
+                                div()
+                                    .id("cache-list")
+                                    .flex_1()
+                                    .min_h_0()
+                                    .overflow_y_scrollbar()
+                                    .children(self.cache_entries.iter().enumerate().map(|(i, e)| {
+                                        let display_name = e.display_name.clone();
+                                        let connection = e.connection.clone();
+                                        let size_str = format_size(e.size);
+                                        h_flex()
+                                            .px_3()
+                                            .py_2()
+                                            .gap_3()
+                                            .border_b_1()
+                                            .border_color(cx.theme().border)
+                                            .items_center()
+                                            .child(
+                                                Checkbox::new(format!("cache-cb-{}", i))
+                                                    .pl_2()
+                                                    .checked(e.selected)
+                                                    .on_click(cx.listener(
+                                                        move |this, checked: &bool, _, cx| {
+                                                            if i < this.cache_entries.len() {
+                                                                this.cache_entries[i].selected = *checked;
+                                                                cx.notify();
+                                                            }
+                                                        },
+                                                    )),
+                                            )
+                                            .child(div().w_1_2().child(display_name))
+                                            .child(div().w_1_2().child(connection))
+                                            .child(div().w_24().pr_2().text_right().child(size_str))
+                                    }))
+                            ),
+                        )
+                    }
             })
     }
 }
