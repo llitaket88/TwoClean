@@ -43,15 +43,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Версия ${{ github.ref_name }}
-          body: |
-            ## Новое в версии
-            - Автоматическая проверка наличия новой версии программы при запуске.
-
-            ## Установка
-            - Скачайте файл `TwoClean.exe` и запустите его.
-
-            ## Системные требования
-            - Windows 10/11
+          body_path: docs/CHANGELOG-${{ github.ref_name }}.md
           files: target/release/TwoClean.exe
           draft: false
           prerelease: false
