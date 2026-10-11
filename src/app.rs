@@ -186,7 +186,7 @@ impl TwoCleanApp {
                 (message, button_label, button_url)
             }
             None => (
-                "Вы используете последнюю версию".to_string(),
+                "Вы используете актуальную версию".to_string(),
                 "О программе",
                 "https://github.com/llitaket88/TwoClean",
             ),
