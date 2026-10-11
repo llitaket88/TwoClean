@@ -52,15 +52,14 @@ impl TwoCleanApp {
         let current_version = self.version;
 
         cx.spawn(async move |this, cx| {
-            if let Some(new_version) = platform::get_data_from_github(http_client).await {
-                if new_version != current_version {
+            if let Some(new_version) = platform::get_data_from_github(http_client).await
+                && new_version != current_version {
                     let _ = this.update(cx, |app, cx| {
                         app.new_available_version = Some(new_version);
                         app.popover_open = true;
                         cx.notify();
                     });
                 }
-            }
         })
         .detach();
     }
