@@ -53,13 +53,14 @@ impl TwoCleanApp {
 
         cx.spawn(async move |this, cx| {
             if let Some(new_version) = platform::get_data_from_github(http_client).await
-                && new_version != current_version {
-                    let _ = this.update(cx, |app, cx| {
-                        app.new_available_version = Some(new_version);
-                        app.popover_open = true;
-                        cx.notify();
-                    });
-                }
+                && new_version != current_version
+            {
+                let _ = this.update(cx, |app, cx| {
+                    app.new_available_version = Some(new_version);
+                    app.popover_open = true;
+                    cx.notify();
+                });
+            }
         })
         .detach();
     }
@@ -178,7 +179,7 @@ impl TwoCleanApp {
     fn render_update_notification(&self) -> impl IntoElement {
         let update = match &self.new_available_version {
             Some(version) => {
-                let message = format!("Текущая: v{}. Новая версия v{}", self.version, version);
+                let message = format!("Текущая: v{}. Доступна: v{}.", self.version, version);
                 let button_label = "Скачать";
                 let button_url = "https://github.com/llitaket88/TwoClean/releases/latest";
                 (message, button_label, button_url)
