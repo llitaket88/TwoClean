@@ -71,6 +71,7 @@ impl TwoCleanApp {
     }
 
     fn load_infobases_and_cache(&mut self, cx: &mut Context<Self>) {
+        self.error_message = None;
         self.cache_loading = true;
         self.infobases_loading = true;
         cx.notify();
@@ -186,7 +187,7 @@ impl TwoCleanApp {
                 (message, button_label, button_url)
             }
             None => (
-                "Вы используете последнюю версию".to_string(),
+                "Вы используете актуальную версию".to_string(),
                 "О программе",
                 "https://github.com/llitaket88/TwoClean",
             ),
