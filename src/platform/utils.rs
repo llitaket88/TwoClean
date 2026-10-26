@@ -1,4 +1,6 @@
-use gpui_http_client::{HttpClient, github::latest_github_release};
+use futures::AsyncReadExt;
+use gpui_http_client::{AsyncBody, HttpClient, github::latest_github_release};
+use sha2::{Digest, Sha256};
 use std::sync::Arc;
 
 use sysinfo::{Pid, ProcessesToUpdate, System};
@@ -105,10 +107,93 @@ pub fn has_running_1c_processes() -> bool {
     })
 }
 
-/// Получает данные о новой версии программы с GitHub
-pub async fn get_data_from_github(http_client: Arc<dyn HttpClient>) -> Option<String> {
-    match latest_github_release("llitaket88/TwoClean", false, false, http_client).await {
-        Ok(release) => Some(release.tag_name.trim_start_matches("v").to_string()),
-        Err(_e) => None,
+/// Содержит информацию о новом релизе
+#[derive(Debug, Clone)]
+pub struct UpdateInfo {
+    pub version: String,
+    pub download_url: String,
+    pub sha256: Option<String>,
+}
+
+/// Получает данные о новой версии программы
+pub async fn get_update_info(http_client: Arc<dyn HttpClient>) -> Option<UpdateInfo> {
+    let release = latest_github_release("llitaket88/TwoClean", false, false, http_client)
+        .await
+        .ok()?;
+
+    let asset = release
+        .assets
+        .iter()
+        .find(|asset| asset.name == "TwoClean.exe")?;
+
+    let sha256 = asset.digest.clone();
+
+    Some(UpdateInfo {
+        version: release.tag_name.trim_start_matches('v').to_string(),
+        download_url: asset.browser_download_url.clone(),
+        sha256,
+    })
+}
+
+/// Скачивание обновления
+pub async fn download_update(
+    http_client: Arc<dyn HttpClient>,
+    url: &str,
+) -> anyhow::Result<Vec<u8>> {
+    let mut response = http_client.get(url, AsyncBody::empty(), true).await?;
+
+    if !response.status().is_success() {
+        anyhow::bail!("Ошибка скачивания: HTTP {}", response.status());
     }
+
+    let mut bytes = Vec::new();
+    response.body_mut().read_to_end(&mut bytes).await?;
+
+    Ok(bytes)
+}
+
+/// Проверка SHA256 полученного файла
+pub fn verify_sha256(bytes: &[u8], expected: &str) -> bool {
+    let hash = Sha256::digest(bytes);
+    let actual: String = hash.iter().map(|byte| format!("{byte:02x}")).collect();
+
+    actual.eq_ignore_ascii_case(expected)
+}
+
+/// Скачивает обновление и проверяет SHA-256
+pub async fn download_and_check_hash(
+    http_client: Arc<dyn HttpClient>,
+    info: &UpdateInfo,
+) -> anyhow::Result<Vec<u8>> {
+    let expected = info
+        .sha256
+        .as_deref()
+        .ok_or_else(|| anyhow::anyhow!("У релиза отсутствует SHA-256"))?;
+
+    let bytes = download_update(http_client, &info.download_url).await?;
+
+    if !verify_sha256(&bytes, expected) {
+        anyhow::bail!("SHA-256 скачанного файла не совпадает");
+    }
+
+    Ok(bytes)
+}
+
+/// Сохраняет проверенное обновление во временный файл
+pub fn save_update(bytes: &[u8]) -> anyhow::Result<std::path::PathBuf> {
+    let dir = std::env::temp_dir();
+    println!("Temporary directory: {}", dir.display());
+
+    let path = std::env::temp_dir().join("TwoClean-update.exe");
+
+    std::fs::write(&path, bytes)?;
+
+    let current_exe = std::env::current_exe();
+
+    println!("Current exe: {}", current_exe.unwrap().display());
+
+    let pid = std::process::id();
+    println!("Current PID: {pid}");
+
+    Ok(path)
 }
