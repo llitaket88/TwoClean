@@ -52,8 +52,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Версия ${{ github.ref_name }}
           body_path: docs/CHANGELOG-${{ github.ref_name }}.md
-          files: |
-            target/release/TwoClean.exe
-            target/release/TwoClean.exe.sha256
+          files: target/release/TwoClean.exe
+          fail_on_unmatched_files: false
           draft: false
           prerelease: false

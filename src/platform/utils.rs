@@ -3,7 +3,7 @@ use gpui_http_client::{AsyncBody, HttpClient, github::latest_github_release};
 use sha2::{Digest, Sha256};
 use std::sync::Arc;
 
-use sysinfo::{ProcessesToUpdate, System};
+use sysinfo::{Pid, ProcessesToUpdate, System};
 use walkdir::WalkDir;
 use windows::{
     Win32::{
@@ -83,13 +83,27 @@ pub fn show_already_running_message() {
     }
 }
 
-/// Проверка запущенных процессов 1с
+/// Проверка запущенных процессов 1С в текущей сессии
 pub fn has_running_1c_processes() -> bool {
     let mut system = System::new();
     system.refresh_processes(ProcessesToUpdate::All, true);
+
+    let current_pid = Pid::from_u32(std::process::id());
+
+    let current_session_id = match system.process(current_pid) {
+        Some(process) => process.session_id(),
+        None => return false,
+    };
+
     system.processes().values().any(|process| {
-        let name = process.name().to_string_lossy().to_ascii_lowercase();
-        name.starts_with("1cv8") && name.ends_with(".exe")
+        let is_same_session = process.session_id() == current_session_id;
+
+        if is_same_session {
+            let name = process.name().to_string_lossy().to_ascii_lowercase();
+            name.starts_with("1cv8") && name.ends_with(".exe")
+        } else {
+            false
+        }
     })
 }
 
