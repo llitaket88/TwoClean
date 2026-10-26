@@ -6,9 +6,9 @@ build = "build.rs"
 
 [dependencies]
 anyhow  = "1.0.4"
-gpui-kit = "0.7"
-reqwest_client = { package = "gpui-pre-reqwest-client", version = "0.3.8" }
-gpui_http_client = { package = "gpui-pre-http-client", version = "0.3.8" }
+gpui-kit = "0.8.0"
+reqwest_client = { package = "gpui-pre-reqwest-client", version = "=0.3.9" }
+gpui_http_client = { package = "gpui-pre-http-client", version = "=0.3.9" }
 sysinfo = "0.39.6"
 uuid = "1.27.0"
 walkdir = "2.5.0"
