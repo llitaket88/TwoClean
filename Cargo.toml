@@ -1,8 +1,9 @@
 [package]
 name = "TwoClean"
-version = "1.2.4"
+version = "1.2.3"
 edition = "2024"
 build = "build.rs"
+default-run = "TwoClean"
 
 [dependencies]
 anyhow  = "1.0.4"
@@ -15,9 +16,15 @@ walkdir = "2.5.0"
 windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_UI_WindowsAndMessaging"] }
 serde_json = "1.0.151"
 futures = "0.3.34"
+semver = "1.0.28"
+sha2 = "0.11.1"
 
 [build-dependencies]
 winres = "0.1"
 
 [workspace]
 members = ["automation"]
+
+[[bin]]
+name = "TwoClean-updater"
+path = "src/bin/updater.rs"

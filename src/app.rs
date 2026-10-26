@@ -52,11 +52,17 @@ impl TwoCleanApp {
         let current_version = self.version;
 
         cx.spawn(async move |this, cx| {
-            if let Some(new_version) = platform::get_data_from_github(http_client).await
-                && new_version != current_version
+            if let Some(update) = platform::get_update_info(http_client.clone()).await
+                && update.version != current_version
             {
+                let bytes = platform::utils::download_and_check_hash(http_client.clone(), &update)
+                    .await
+                    .ok()
+                    .unwrap();
+                let temp_path = platform::utils::save_update(&bytes);
+
                 this.update(cx, |app, cx| {
-                    app.new_available_version = Some(new_version);
+                    app.new_available_version = Some(update.version);
                     app.popover_open = true;
                     cx.notify();
                 })

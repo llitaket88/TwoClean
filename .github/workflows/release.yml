@@ -32,11 +32,19 @@ jobs:
       - name: Build
         run: cargo build --release
 
+      - name: Generate SHA256 checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash target/release/TwoClean.exe -Algorithm SHA256).Hash
+          "$hash TwoClean.exe" | Out-File -FilePath target/release/TwoClean.exe.sha256 -Encoding ascii
+
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: TwoClean-exe
-          path: target/release/TwoClean.exe
+          path: |
+            target/release/TwoClean.exe
+            target/release/TwoClean.exe.sha256
 
       - name: Create Release
         uses: softprops/action-gh-release@v3
@@ -44,6 +52,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Версия ${{ github.ref_name }}
           body_path: docs/CHANGELOG-${{ github.ref_name }}.md
-          files: target/release/TwoClean.exe
+          files: |
+            target/release/TwoClean.exe
+            target/release/TwoClean.exe.sha256
           draft: false
           prerelease: false
