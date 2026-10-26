@@ -71,6 +71,7 @@ impl TwoCleanApp {
     }
 
     fn load_infobases_and_cache(&mut self, cx: &mut Context<Self>) {
+        self.error_message = None;
         self.cache_loading = true;
         self.infobases_loading = true;
         cx.notify();
